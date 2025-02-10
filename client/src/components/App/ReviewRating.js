@@ -1,10 +1,15 @@
 import React from 'react';
-import { FormControl, FormControlLabel, RadioGroup, Radio } from '@mui/material';
+import {FormControl, FormControlLabel, RadioGroup, Radio} from '@mui/material';
 
-function ReviewRating({ selectedRating, handleRatingChange }) {
+function ReviewRating({selectedRating, handleRatingChange}) {
   return (
     <FormControl component="fieldset">
-      <RadioGroup id="review-rating" value={selectedRating} onChange={handleRatingChange} row>
+      <RadioGroup
+        id="review-rating"
+        value={selectedRating}
+        onChange={handleRatingChange}
+        row
+      >
         <FormControlLabel value="1" control={<Radio />} label="1" />
         <FormControlLabel value="2" control={<Radio />} label="2" />
         <FormControlLabel value="3" control={<Radio />} label="3" />

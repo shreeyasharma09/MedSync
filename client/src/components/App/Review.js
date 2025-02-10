@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Grid, Typography, Button } from '@mui/material';
+import React, {useState} from 'react';
+import {Grid, Typography, Button} from '@mui/material';
 import MovieSelection from './MovieSelection';
 import ReviewTitle from './ReviewTitle';
 import ReviewBody from './ReviewBody';
@@ -20,27 +20,27 @@ function Review() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const handleMovieChange = (event) => {
+  const handleMovieChange = event => {
     setSelectedMovie(event.target.value);
-    setErrors((prevErrors) => ({ ...prevErrors, selectedMovie: false }));
+    setErrors(prevErrors => ({...prevErrors, selectedMovie: false}));
     setShowConfirmation(false);
   };
 
-  const handleTitleChange = (event) => {
+  const handleTitleChange = event => {
     setEnteredTitle(event.target.value);
-    setErrors((prevErrors) => ({ ...prevErrors, enteredTitle: false }));
+    setErrors(prevErrors => ({...prevErrors, enteredTitle: false}));
     setShowConfirmation(false);
   };
 
-  const handleReviewChange = (event) => {
+  const handleReviewChange = event => {
     setEnteredReview(event.target.value);
-    setErrors((prevErrors) => ({ ...prevErrors, enteredReview: false }));
+    setErrors(prevErrors => ({...prevErrors, enteredReview: false}));
     setShowConfirmation(false);
   };
 
-  const handleRatingChange = (event) => {
+  const handleRatingChange = event => {
     setSelectedRating(event.target.value);
-    setErrors((prevErrors) => ({ ...prevErrors, selectedRating: false }));
+    setErrors(prevErrors => ({...prevErrors, selectedRating: false}));
     setShowConfirmation(false);
   };
 
@@ -85,31 +85,59 @@ function Review() {
           selectedMovie={selectedMovie}
           handleMovieChange={handleMovieChange}
         />
-        {errors.selectedMovie && <Typography color="red">Select your movie</Typography>}
+        {errors.selectedMovie && (
+          <Typography color="red">Select your movie</Typography>
+        )}
       </Grid>
       <Grid item xs={12}>
-        <ReviewTitle enteredTitle={enteredTitle} handleTitleChange={handleTitleChange} />
-        {errors.enteredTitle && <Typography color="red">Enter your review title</Typography>}
+        <ReviewTitle
+          enteredTitle={enteredTitle}
+          handleTitleChange={handleTitleChange}
+        />
+        {errors.enteredTitle && (
+          <Typography color="red">Enter your review title</Typography>
+        )}
       </Grid>
       <Grid item xs={12}>
-        <ReviewBody enteredReview={enteredReview} handleReviewChange={handleReviewChange} />
-        {errors.enteredReview && <Typography color="red">Enter your review</Typography>}
+        <ReviewBody
+          enteredReview={enteredReview}
+          handleReviewChange={handleReviewChange}
+        />
+        {errors.enteredReview && (
+          <Typography color="red">Enter your review</Typography>
+        )}
       </Grid>
       <Grid item xs={12}>
-        <ReviewRating selectedRating={selectedRating} handleRatingChange={handleRatingChange} />
-        {errors.selectedRating && <Typography color="red">Select the rating</Typography>}
+        <ReviewRating
+          selectedRating={selectedRating}
+          handleRatingChange={handleRatingChange}
+        />
+        {errors.selectedRating && (
+          <Typography color="red">Select the rating</Typography>
+        )}
       </Grid>
       <Grid item xs={12}>
-        <Button variant="contained" color="primary" onClick={handleSubmit} id="submit-button">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+          id="submit-button"
+        >
           Submit
         </Button>
       </Grid>
       {showConfirmation && (
         <Grid item xs={12}>
-          <Typography variant="h6" id="confirmation-message">Your review has been received</Typography>
+          <Typography variant="h6" id="confirmation-message">
+            Your review has been received
+          </Typography>
           <Typography variant="subtitle1">Movie: {selectedMovie}</Typography>
-          <Typography variant="subtitle1">Review Title: {enteredTitle}</Typography>
-          <Typography variant="subtitle1">Review Body: {enteredReview}</Typography>
+          <Typography variant="subtitle1">
+            Review Title: {enteredTitle}
+          </Typography>
+          <Typography variant="subtitle1">
+            Review Body: {enteredReview}
+          </Typography>
           <Typography variant="subtitle1">Rating: {selectedRating}</Typography>
         </Grid>
       )}

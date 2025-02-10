@@ -1,7 +1,7 @@
 import React from 'react';
-import { TextField } from '@mui/material';
+import {TextField} from '@mui/material';
 
-function ReviewBody({ enteredReview, handleReviewChange }) {
+function ReviewBody({enteredReview, handleReviewChange}) {
   return (
     <TextField
       id="review-body"

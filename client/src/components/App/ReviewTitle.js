@@ -1,7 +1,7 @@
 import React from 'react';
-import { TextField } from '@mui/material';
+import {TextField} from '@mui/material';
 
-function ReviewTitle({ enteredTitle, handleTitleChange }) {
+function ReviewTitle({enteredTitle, handleTitleChange}) {
   return (
     <TextField
       label="Enter your review title"

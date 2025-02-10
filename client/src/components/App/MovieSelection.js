@@ -1,7 +1,7 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {FormControl, InputLabel, Select, MenuItem} from '@mui/material';
 
-function MovieSelection({ movies, selectedMovie, handleMovieChange }) {
+function MovieSelection({movies, selectedMovie, handleMovieChange}) {
   return (
     <FormControl fullWidth>
       <InputLabel id="movie-select-label">Select a movie</InputLabel>
