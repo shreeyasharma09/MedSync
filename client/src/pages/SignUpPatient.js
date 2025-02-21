@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 
-const SignupFormP = () => {
+const SignUpPatient = () => {
   const [formValues, setFormValues] = useState({
     healthCard: '',
     dob: '',
@@ -49,7 +49,7 @@ const SignupFormP = () => {
     <div
       style={{
         backgroundColor: '#f7f9f6',
-        minHeight: '100vh',
+        minHeight: '90vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -235,4 +235,4 @@ const SignupFormP = () => {
   );
 };
 
-export default SignupFormP;
+export default SignUpPatient;
