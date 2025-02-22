@@ -1,13 +1,14 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TextField, Button, Container, Typography, Grid, Paper, Link, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const SignupFormP = () => {
   const [formValues, setFormValues] = useState({
-    healthCard: "",
-    dob: "",
     firstName: "",
     lastName: "",
+    healthCard: "",
+    dob: "",
     address: "",
     password: "",
   });
@@ -48,19 +49,19 @@ const SignupFormP = () => {
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField fullWidth label="Health Card Number" name="healthCard" variant="outlined" placeholder="Enter your health card number..." value={formValues.healthCard} onChange={handleChange} error={!!errors.healthCard} helperText={errors.healthCard} InputProps={{ style: { borderRadius: "8px" }}} />
+                <TextField fullWidth label="First Name" name="firstName" variant="outlined" placeholder="Enter your first name..." value={formValues.firstName} onChange={handleChange} error={!!errors.firstName} helperText={errors.firstName} />
               </Grid>
               <Grid item xs={6}>
-                <TextField fullWidth label="Date of Birth" name="dob" variant="outlined" placeholder="MM/DD/YYYY" value={formValues.dob} onChange={handleChange} error={!!errors.dob} helperText={errors.dob} InputProps={{ style: { borderRadius: "8px" }}} />
+                <TextField fullWidth label="Last Name" name="lastName" variant="outlined" placeholder="Enter your last name..." value={formValues.lastName} onChange={handleChange} error={!!errors.lastName} helperText={errors.lastName} />
               </Grid>
               <Grid item xs={6}>
-                <TextField fullWidth label="First Name" name="firstName" variant="outlined" placeholder="Enter your first name..." value={formValues.firstName} onChange={handleChange} error={!!errors.firstName} helperText={errors.firstName} InputProps={{ style: { borderRadius: "8px" }}} />
+                <TextField fullWidth label="Health Card Number" name="healthCard" variant="outlined" placeholder="Enter your health card number..." value={formValues.healthCard} onChange={handleChange} error={!!errors.healthCard} helperText={errors.healthCard} />
               </Grid>
               <Grid item xs={6}>
-                <TextField fullWidth label="Last Name" name="lastName" variant="outlined" placeholder="Enter your last name..." value={formValues.lastName} onChange={handleChange} error={!!errors.lastName} helperText={errors.lastName} InputProps={{ style: { borderRadius: "8px" }}} />
+                <TextField fullWidth label="Date of Birth" name="dob" variant="outlined" placeholder="MM/DD/YYYY" value={formValues.dob} onChange={handleChange} error={!!errors.dob} helperText={errors.dob} />
               </Grid>
               <Grid item xs={12}>
-                <TextField fullWidth label="Address" name="address" variant="outlined" placeholder="Enter your full address..." value={formValues.address} onChange={handleChange} error={!!errors.address} helperText={errors.address} InputProps={{ style: { borderRadius: "8px" }}} />
+                <TextField fullWidth label="Address" name="address" variant="outlined" placeholder="Enter your full address..." value={formValues.address} onChange={handleChange} error={!!errors.address} helperText={errors.address} />
               </Grid>
               <Grid item xs={12}>
                 <TextField 
@@ -74,7 +75,6 @@ const SignupFormP = () => {
                   error={!!errors.password} 
                   helperText={errors.password} 
                   InputProps={{
-                    style: { borderRadius: "8px" },
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton onClick={handleClickShowPassword} edge="end">
@@ -92,12 +92,11 @@ const SignupFormP = () => {
               </Grid>
             </Grid>
           </form>
-          <br /> 
-          <Typography variant="body2" align="center" style={{ marginTop: "1rem", color: "#7d8a6a" }}>
+          <Typography variant="body2" align="center" style={{ marginTop: "1.5rem", color: "#7d8a6a" }}>
             Already have an account?{' '}
             <Link href="#" style={{ color: "#3e4b32", fontWeight: "bold", textDecoration: "none" }}>Log in to your patient account</Link>
-            <br /> 
-            <br /> 
+            <br />
+            <br />
             Are you a Healthcare Professional?{' '}
             <Link href="#" style={{ color: "#3e4b32", fontWeight: "bold", textDecoration: "none" }}>Healthcare Log in</Link>
           </Typography>

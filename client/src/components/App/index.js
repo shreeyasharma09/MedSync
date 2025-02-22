@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import SignupFormP from "./signupP";
+import SignupFormH from "./signupH";
+import ConfirmationVerifyH from "./ConfirmationVerifyH";
+import LandingPage from "./Landing";
 // import Profile from "../Profile";
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 
@@ -33,14 +36,19 @@ const App = () => {
               <span style={{ color: "#708b69" }}>Med</span>Sync
             </Typography>
             <Box>
+              <NavLink to="/Landing" label="LandingPage" />
               <NavLink to="/Home" label="Home" />
-              <NavLink to="/" label="Sign Up" />
-              <NavLink to="/profile" label="Profile" />
+              <NavLink to="/SignUpP" label="Patient-Sign Up" />
+              <NavLink to="/SignUpHP" label="Health Professional-Sign Up" />
+              <NavLink to="/Profile" label="Profile" />
             </Box>
           </Toolbar>
         </AppBar>
         <Routes>
-          <Route path="/" element={<SignupFormP />} />
+          <Route path="/SignUpP" element={<SignupFormP />} />
+          <Route path="/ConfirmationVerifyH" element={<ConfirmationVerifyH />} />
+          <Route path="/SignUpHP" element={<SignupFormH />} />
+          <Route path="/Landing" element={<LandingPage />} />
           {/* <Route path="/profile" element={<Profile />} /> */}
         </Routes>
       </div>
