@@ -12,6 +12,10 @@ import LandingPage from '../../pages/Landing';
 import ConfirmationVerifyH from '../../pages/ConfirmationVerifyH';
 import HomePage from '../../pages/HomePage';
 
+import SignInFormHP from '../../pages/SignInFormHP';
+import SignInFormP from '../../pages/SignInFormP';
+
+
 const App = () => {
   return (
     <Router>
@@ -27,6 +31,8 @@ const App = () => {
         <Route path="/Home" element={<HomePage />} />
         <Route path="/SignUpHP" element={<SignupFormH />} />
         <Route path="/ConfirmationVerifyH" element={<ConfirmationVerifyH />} />
+        <Route path="/hp-signin" element={<SignInFormHP />} />
+        <Route path="/p-signin" element={<SignInFormP />} />
       </Routes>
     </Router>
   );

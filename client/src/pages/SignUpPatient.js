@@ -210,7 +210,7 @@ const SignUpPatient = () => {
           >
             Already have an account?{' '}
             <Link
-              href="#"
+              href="p-signin"
               style={{
                 color: '#3e4b32',
                 fontWeight: 'bold',

@@ -15,9 +15,9 @@ const LandingPage = () => {
 
   const handleNext = () => {
     if (selectedRole === 'patient') {
-      navigate('/SignUpPatient');
+      navigate('/p-signin');
     } else if (selectedRole === 'healthcare') {
-      navigate('/SignUpHP');
+      navigate('/hp-signin');
     }
   };
 
