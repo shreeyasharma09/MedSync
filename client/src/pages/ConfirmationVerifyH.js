@@ -38,7 +38,7 @@ const ConfirmationVerifyH = () => {
           <Box mt={3}>
             <Button
               variant="contained"
-              onClick={() => navigate('/Home')}
+              onClick={() => navigate('/HomeH')}
               style={{
                 backgroundColor: '#e3ebdc',
                 color: '#3e4b32',
