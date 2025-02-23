@@ -10,6 +10,7 @@ import MedicalHistory from '../../pages/MedicalHistory';
 import BookingsPage from '../../pages/BookingsPage';
 import LandingPage from '../../pages/Landing';
 import ConfirmationVerifyH from '../../pages/ConfirmationVerifyH';
+import HomePage from '../../pages/HomePage';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/SignUpPatient" element={<SignUpPatient />} />
         <Route path="/bookings" element={<BookingsPage />} />
         <Route path="/Landing" element={<LandingPage />} />
+        <Route path="/Home" element={<HomePage />} />
         <Route path="/SignUpHP" element={<SignupFormH />} />
         <Route path="/ConfirmationVerifyH" element={<ConfirmationVerifyH />} />
       </Routes>
