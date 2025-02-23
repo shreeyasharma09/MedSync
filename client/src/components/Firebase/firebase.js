@@ -1,34 +1,45 @@
-import app from 'firebase/app';
-import 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, updatePassword } from 'firebase/auth';
 
 const firebaseConfig = {
-  //Enter your firebase API details
+  apiKey: "AIzaSyD6iQz6eQX2AYIl_kPWyiPtjF7HoAQIwPU",
+  authDomain: "mse-342-project-dev-dc2f4.firebaseapp.com",
+  projectId: "mse-342-project-dev-dc2f4",
+  storageBucket: "mse-342-project-dev-dc2f4.appspot.com",
+  messagingSenderId: "42730330460",
+  appId: "1:42730330460:web:67cd2cf59793119fc00999",
+  measurementId: "G-1LYEKXLC1Y"
 };
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
 class Firebase {
   constructor() {
-    app.initializeApp(firebaseConfig);
-    this.auth = app.auth();
+    this.auth = auth;
   }
 
   // *** Auth API ***
 
   doCreateUserWithEmailAndPassword = (email, password) =>
-    this.auth.createUserWithEmailAndPassword(email, password);
+    createUserWithEmailAndPassword(this.auth, email, password);
 
   doSignInWithEmailAndPassword = (email, password) =>
-    this.auth.signInWithEmailAndPassword(email, password);
+    signInWithEmailAndPassword(this.auth, email, password);
 
-  doSignOut = () => this.auth.signOut();
+  doSignOut = () => signOut(this.auth);
 
-  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
+  doPasswordReset = email => sendPasswordResetEmail(this.auth, email);
 
-  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
+  doPasswordUpdate = password => updatePassword(this.auth.currentUser, password);
 
-  doGetIdToken = bool => {
-    return this.auth.currentUser.getIdToken(/* forceRefresh */ bool);
+  doGetIdToken = (forceRefresh = false) => {
+    return this.auth.currentUser.getIdToken(forceRefresh);
   };
 
-  doGetUserByEmail = email => this.auth.getUserByEmail(email);
+  doGetUserByEmail = email => {
+    throw new Error("Error fetching User");
+  };
 }
 
 export default Firebase;
