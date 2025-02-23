@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
   TextField,
   Button,
@@ -9,16 +10,54 @@ import {
   Link,
   IconButton,
   InputAdornment,
+  MenuItem,
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 
-const SignUpPatient = () => {
+const hospitals = ['Hospital 1', 'Hospital 2', 'Hospital 3'];
+const specialties = [
+  'Emergency Medicine',
+  'Intensive Care (Critical Care Medicine)',
+  'Internal Medicine',
+  'Cardiology',
+  'Pulmonology',
+  'Gastroenterology',
+  'Nephrology',
+  'Endocrinology',
+  'Hematology',
+  'Infectious Disease',
+  'Rheumatology',
+  'General Surgery',
+  'Cardiothoracic Surgery',
+  'Neurosurgery',
+  'Orthopedic Surgery',
+  'Plastic & Reconstructive Surgery',
+  'Otolaryngology (ENT)',
+  'Urology',
+  'Vascular Surgery',
+  'Obstetrics & Gynecology (OB/GYN)',
+  'Pediatrics',
+  'Neonatology',
+  'Neurology',
+  'Psychiatry',
+  'Oncology',
+  'Radiation Oncology',
+  'Palliative Care',
+  'Radiology',
+  'Interventional Radiology',
+  'Pathology',
+  'Anesthesiology',
+];
+
+const SignupFormH = () => {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
-    healthCard: '',
-    dob: '',
     firstName: '',
     lastName: '',
-    address: '',
+    mincNumber: '',
+    dob: '',
+    hospital: '',
+    specialty: '',
     password: '',
   });
 
@@ -33,15 +72,17 @@ const SignUpPatient = () => {
   const handleSubmit = event => {
     event.preventDefault();
     let newErrors = {};
+    let hasErrors = false;
     Object.keys(formValues).forEach(field => {
       if (!formValues[field]) {
         newErrors[field] = 'This field is required';
+        hasErrors = true;
       }
     });
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      window.location.href = '/Home';
+    if (!hasErrors) {
+      navigate('/ConfirmationVerifyH');
     }
   };
 
@@ -57,6 +98,7 @@ const SignUpPatient = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        paddingBottom: '2rem',
       }}
     >
       <Container maxWidth="sm">
@@ -76,7 +118,7 @@ const SignUpPatient = () => {
             style={{color: '#3e4b32', fontWeight: '600'}}
             gutterBottom
           >
-            Create your new <strong>patient</strong> account
+            Create your new <strong>Healthcare Professional</strong> account
           </Typography>
           <Typography
             variant="body2"
@@ -91,34 +133,6 @@ const SignUpPatient = () => {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  label="Health Card Number"
-                  name="healthCard"
-                  variant="outlined"
-                  placeholder="Enter your health card number..."
-                  value={formValues.healthCard}
-                  onChange={handleChange}
-                  error={!!errors.healthCard}
-                  helperText={errors.healthCard}
-                  InputProps={{style: {borderRadius: '8px'}}}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Date of Birth"
-                  name="dob"
-                  variant="outlined"
-                  placeholder="MM/DD/YYYY"
-                  value={formValues.dob}
-                  onChange={handleChange}
-                  error={!!errors.dob}
-                  helperText={errors.dob}
-                  InputProps={{style: {borderRadius: '8px'}}}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
                   label="First Name"
                   name="firstName"
                   variant="outlined"
@@ -127,7 +141,6 @@ const SignUpPatient = () => {
                   onChange={handleChange}
                   error={!!errors.firstName}
                   helperText={errors.firstName}
-                  InputProps={{style: {borderRadius: '8px'}}}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -141,22 +154,71 @@ const SignUpPatient = () => {
                   onChange={handleChange}
                   error={!!errors.lastName}
                   helperText={errors.lastName}
-                  InputProps={{style: {borderRadius: '8px'}}}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="MINC Number"
+                  name="mincNumber"
+                  variant="outlined"
+                  placeholder="Enter your MINC number..."
+                  value={formValues.mincNumber}
+                  onChange={handleChange}
+                  error={!!errors.mincNumber}
+                  helperText={errors.mincNumber}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  fullWidth
+                  label="Date of Birth"
+                  name="dob"
+                  variant="outlined"
+                  placeholder="MM/DD/YYYY"
+                  value={formValues.dob}
+                  onChange={handleChange}
+                  error={!!errors.dob}
+                  helperText={errors.dob}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  select
                   fullWidth
-                  label="Address"
-                  name="address"
+                  label="Hospital"
+                  name="hospital"
                   variant="outlined"
-                  placeholder="Enter your full address..."
-                  value={formValues.address}
+                  value={formValues.hospital}
                   onChange={handleChange}
-                  error={!!errors.address}
-                  helperText={errors.address}
-                  InputProps={{style: {borderRadius: '8px'}}}
-                />
+                  error={!!errors.hospital}
+                  helperText={errors.hospital}
+                >
+                  {hospitals.map(hospital => (
+                    <MenuItem key={hospital} value={hospital}>
+                      {hospital}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  select
+                  fullWidth
+                  label="Specialty"
+                  name="specialty"
+                  variant="outlined"
+                  value={formValues.specialty}
+                  onChange={handleChange}
+                  error={!!errors.specialty}
+                  helperText={errors.specialty}
+                >
+                  {specialties.map(specialty => (
+                    <MenuItem key={specialty} value={specialty}>
+                      {specialty}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -170,7 +232,6 @@ const SignUpPatient = () => {
                   error={!!errors.password}
                   helperText={errors.password}
                   InputProps={{
-                    style: {borderRadius: '8px'},
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton
@@ -202,11 +263,10 @@ const SignUpPatient = () => {
               </Grid>
             </Grid>
           </form>
-          <br />
           <Typography
             variant="body2"
             align="center"
-            style={{marginTop: '1rem', color: '#7d8a6a'}}
+            style={{marginTop: '2rem', paddingBottom: '1rem', color: '#7d8a6a'}}
           >
             Already have an account?{' '}
             <Link
@@ -217,20 +277,20 @@ const SignUpPatient = () => {
                 textDecoration: 'none',
               }}
             >
-              Log in to your patient account
+              Log in to your healthcare professional account
             </Link>
             <br />
             <br />
-            Are you a Healthcare Professional?{' '}
+            Are you a Patient?{' '}
             <Link
-              href="/SignUpHP"
+              href="SignUpPatient"
               style={{
                 color: '#3e4b32',
                 fontWeight: 'bold',
                 textDecoration: 'none',
               }}
             >
-              Healthcare Professional Sign Up
+              Patient Sign Up
             </Link>
           </Typography>
         </Paper>
@@ -239,4 +299,4 @@ const SignUpPatient = () => {
   );
 };
 
-export default SignUpPatient;
+export default SignupFormH;
