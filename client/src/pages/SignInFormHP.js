@@ -1,34 +1,45 @@
-import { useState } from "react"
-import { useNavigate } from 'react-router-dom'
-import { TextField, Checkbox, FormControlLabel, Button, Typography, Grid, Link, Box, Paper, Container } from '@mui/material'
+import { useState, useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+import { TextField, Checkbox, FormControlLabel, Button, Typography, Grid, Link, Box, Paper, Container } from '@mui/material';
+import FirebaseContext from '../components/Firebase/context' // Import Firebase context
 
 function SignInFormHP() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     MINC: "",
     password: "",
     rememberMe: false,
-  })
+  });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const firebase = useContext(FirebaseContext); // Access Firebase instance
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false)
-      console.log("Form submitted:", formData)
-    }, 1000)
-  }
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Sign in with Firebase
+      await firebase.doSignInWithEmailAndPassword(formData.MINC, formData.password);
+      console.log("User signed in successfully!");
+      navigate('/profile'); // Redirect user to the main dashboard after successful sign-in
+    } catch (err) {
+      setError(err.message); // Set error message
+      console.error("Sign-in error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }))
-  }
+    }));
+  };
 
   return (
     <div
@@ -67,6 +78,12 @@ function SignInFormHP() {
           >
             Enter your Medical Identification Number for Canada and password to access your account.
           </Typography>
+
+          {error && ( // Display a error message
+            <Typography color="error" align="center" style={{ marginBottom: '1rem' }}>
+              {error}
+            </Typography>
+          )}
 
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
@@ -141,8 +158,8 @@ function SignInFormHP() {
             <Link
               href="#"
               onClick={(e) => {
-                e.preventDefault()
-                navigate('/SignUpHP')
+                e.preventDefault();
+                navigate('/SignUpHP');
               }}
               style={{
                 color: '#3e4b32',
@@ -156,7 +173,7 @@ function SignInFormHP() {
         </Paper>
       </Container>
     </div>
-  )
+  );
 }
 
-export default SignInFormHP
+export default SignInFormHP;
