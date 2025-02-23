@@ -30,15 +30,19 @@ const SignUpPatient = () => {
     setErrors({...errors, [event.target.name]: ''});
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     let newErrors = {};
-    Object.keys(formValues).forEach(field => {
+    Object.keys(formValues).forEach((field) => {
       if (!formValues[field]) {
         newErrors[field] = 'This field is required';
       }
     });
     setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      window.location.href = '/Home';
+    }
   };
 
   const handleClickShowPassword = () => {
@@ -219,14 +223,14 @@ const SignUpPatient = () => {
             <br />
             Are you a Healthcare Professional?{' '}
             <Link
-              href="#"
+              href="/SignUpHP"
               style={{
                 color: '#3e4b32',
                 fontWeight: 'bold',
                 textDecoration: 'none',
               }}
             >
-              Healthcare Log in
+              Healthcare Professional Sign Up
             </Link>
           </Typography>
         </Paper>

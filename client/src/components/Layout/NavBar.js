@@ -34,9 +34,9 @@ const NavBar = () => {
           <span style={{color: '#708b69'}}>Med</span>Sync
         </Typography>
         <Box>
+          <NavLink to="/Landing" label="Landing" />
           <NavLink to="/Home" label="Home" />
-          <NavLink to="/" label="Sign Up" />
-          <NavLink to="/profile" label="Profile" />
+          <NavLink to="/Profile" label="Profile" />
         </Box>
       </Toolbar>
     </AppBar>
