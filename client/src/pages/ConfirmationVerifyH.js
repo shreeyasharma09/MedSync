@@ -25,7 +25,7 @@ const ConfirmationVerifyH = () => {
             </Button>
             <Button 
               variant="contained" 
-              onClick={() => navigate("/Profile")} 
+              onClick={() => navigate("/profile/hp")} 
               style={{ backgroundColor: "#e3ebdc", color: "#3e4b32", fontWeight: "bold" }}
             >
               Go to Profile

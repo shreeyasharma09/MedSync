@@ -36,7 +36,7 @@ const NavBar = () => {
         <Box>
           <NavLink to="/Landing" label="Landing" />
           <NavLink to="/Home" label="Home" />
-          <NavLink to="/Profile" label="Profile" />
+          <NavLink to="/profile" label="Profile" />
         </Box>
       </Toolbar>
     </AppBar>
