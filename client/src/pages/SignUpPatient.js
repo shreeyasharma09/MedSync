@@ -30,10 +30,10 @@ const SignUpPatient = () => {
     setErrors({...errors, [event.target.name]: ''});
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault();
     let newErrors = {};
-    Object.keys(formValues).forEach((field) => {
+    Object.keys(formValues).forEach(field => {
       if (!formValues[field]) {
         newErrors[field] = 'This field is required';
       }

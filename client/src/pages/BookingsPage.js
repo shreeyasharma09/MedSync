@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardActions,
-  IconButton,
   Stack,
 } from '@mui/material';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -40,7 +39,7 @@ export default function BookingsPage() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        minHeight: '80vh',
         backgroundColor: '#f7f9f6',
         position: 'relative',
         overflow: 'hidden',
