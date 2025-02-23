@@ -115,7 +115,7 @@ const SignupFormH = () => {
             <br />
             <br />
             Are you a Patient?{' '}
-            <Link href="#" style={{ color: "#3e4b32", fontWeight: "bold", textDecoration: "none" }}>Patient Log in</Link>
+            <Link href="SignUpPatient" style={{ color: "#3e4b32", fontWeight: "bold", textDecoration: "none" }}>Patient Sign Up</Link>
           </Typography>
         </Paper>
       </Container>
