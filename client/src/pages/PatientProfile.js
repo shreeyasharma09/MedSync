@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-export default function PatientProfile() {
+function PatientProfile() {
   // Dummy profile data (Replace with API call)
   const [profile, setProfile] = useState({
     healthCardNumber: "1234-567-890-AB",
