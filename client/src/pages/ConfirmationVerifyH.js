@@ -48,10 +48,14 @@ const ConfirmationVerifyH = () => {
             >
               Go to Home
             </Button>
-            <Button 
-              variant="contained" 
-              onClick={() => navigate("/profile/hp")} 
-              style={{ backgroundColor: "#e3ebdc", color: "#3e4b32", fontWeight: "bold" }}
+            <Button
+              variant="contained"
+              onClick={() => navigate('/profile/hp')}
+              style={{
+                backgroundColor: '#e3ebdc',
+                color: '#3e4b32',
+                fontWeight: 'bold',
+              }}
             >
               Go to Profile
             </Button>
