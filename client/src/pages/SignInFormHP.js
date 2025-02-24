@@ -76,7 +76,7 @@ function SignInFormHP() {
             align="center"
             style={{ color: '#7d8a6a', marginBottom: '1rem' }}
           >
-            Enter your Medical Identification Number for Canada and password to access your account.
+            Enter your email and password to access your account.
           </Typography>
 
           {error && ( // Display a error message
@@ -89,7 +89,7 @@ function SignInFormHP() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  label="Medical Identification Number for Canada"
+                  label="Email"
                   type="text"
                   name="MINC"
                   fullWidth
