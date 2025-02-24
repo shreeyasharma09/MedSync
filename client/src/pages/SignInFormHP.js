@@ -38,7 +38,7 @@ function SignInFormHP() {
         formData.password,
       );
       console.log('User signed in successfully!');
-      navigate('/profile'); // Redirect user to the main dashboard after successful sign-in
+      navigate('/profile/hp'); // Redirect user to the main dashboard after successful sign-in
     } catch (err) {
       setError(err.message); // Set error message
       console.error('Sign-in error:', err);

@@ -79,7 +79,7 @@ const ProfileSelection = () => {
           {/* View and Update Profile */}
           <Paper
             component={Link}
-            to="/profile/patient/view-profile"
+            to="/profile/view-profile"
             elevation={3}
             sx={{
               p: 3,
@@ -111,7 +111,7 @@ const ProfileSelection = () => {
           {/* View and Update Medical History */}
           <Paper
             component={Link}
-            to="/profile/patient/medical-history"
+            to="/profile/medical-history"
             elevation={3}
             sx={{
               p: 3,
