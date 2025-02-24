@@ -15,7 +15,7 @@ import {
   CancelOutlined,
 } from '@mui/icons-material';
 
-export default function MedicalHistory() {
+const MedicalHistory = () => {
   // Sample initial data
   const [allergies, setAllergies] = useState([
     'Peanuts',
@@ -283,3 +283,5 @@ export default function MedicalHistory() {
     </Box>
   );
 }
+
+export default MedicalHistory;
