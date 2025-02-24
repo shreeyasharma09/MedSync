@@ -119,10 +119,10 @@ const SignUpPatient = () => {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  label="Health Card Number"
+                  label="Email"
                   name="healthCard"
                   variant="outlined"
-                  placeholder="Enter your health card number..."
+                  placeholder="Enter your email..."
                   value={formValues.healthCard}
                   onChange={handleChange}
                   error={!!errors.healthCard}

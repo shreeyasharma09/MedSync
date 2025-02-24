@@ -183,10 +183,10 @@ const SignupFormHP = () => {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  label="MINC Number"
+                  label="Email"
                   name="mincNumber"
                   variant="outlined"
-                  placeholder="Enter your MINC number..."
+                  placeholder="Enter your email ..."
                   value={formValues.mincNumber}
                   onChange={handleChange}
                   error={!!errors.mincNumber}
