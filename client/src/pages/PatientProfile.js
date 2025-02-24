@@ -40,7 +40,7 @@ const PatientProfile = () => {
   // Handle input change
   const handleChange = (e) => {
     setEditedProfile({ ...editedProfile, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Clear errors when typing
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   // Toggle password visibility
@@ -50,11 +50,6 @@ const PatientProfile = () => {
 
   // Open confirmation dialog before saving
   const handleSaveClick = () => {
-    setConfirmDialogOpen(true);
-  };
-
-  // Confirm and save changes
-  const handleConfirmSave = () => {
     let newErrors = {};
     Object.keys(editedProfile).forEach((field) => {
       if (!editedProfile[field].trim()) {
@@ -64,10 +59,14 @@ const PatientProfile = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setConfirmDialogOpen(false); // Close dialog if errors exist
-      return;
+      return; // Stop the process if there are errors
     }
 
+    setConfirmDialogOpen(true);
+  };
+
+  // Confirm and save changes
+  const handleConfirmSave = () => {
     setProfile(editedProfile);
     setIsEditing(false);
     setConfirmDialogOpen(false);
@@ -87,34 +86,6 @@ const PatientProfile = () => {
         p: 2,
       }}
     >
-      {/* Decorative background circles */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          width: 200,
-          height: 200,
-          bgcolor: "#CFD8C9",
-          borderRadius: "50%",
-          transform: "translate(50%, -50%)",
-          zIndex: 0,
-        }}
-      />
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          width: 250,
-          height: 250,
-          bgcolor: "#d9e6da",
-          borderRadius: "50%",
-          transform: "translate(-50%, 50%)",
-          zIndex: 0,
-        }}
-      />
-
       <Paper
         elevation={3}
         sx={{
@@ -128,14 +99,10 @@ const PatientProfile = () => {
           border: "1px solid #b0b8a6",
         }}
       >
-        <Typography
-          variant="h5"
-          sx={{ fontWeight: "bold", color: "#3e4b32", mb: 3 }}
-        >
+        <Typography variant="h5" sx={{ fontWeight: "bold", color: "#3e4b32", mb: 3 }}>
           Your Profile
         </Typography>
 
-        {/* First Name & Last Name in a single row */}
         <Box display="flex" gap={2}>
           {["firstName", "lastName"].map((field, index) => (
             <Box key={index} flex={1}>
@@ -150,24 +117,11 @@ const PatientProfile = () => {
                 fullWidth
                 error={!!errors[field]}
                 helperText={errors[field]}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderColor: "#3e4b32" },
-                    "&:hover fieldset": { borderColor: "#738A6E" },
-                    "&.Mui-focused fieldset": { borderColor: "#738A6E" },
-                  },
-                  input: {
-                    borderRadius: "5px",
-                    padding: "10px",
-                    bgcolor: "white",
-                  },
-                }}
               />
             </Box>
           ))}
         </Box>
 
-        {/* Other Profile Fields */}
         <Box display="flex" flexDirection="column" gap={2} mt={2}>
           {[
             { label: "Health Card Number", name: "healthCardNumber" },
@@ -179,34 +133,22 @@ const PatientProfile = () => {
               <Typography fontWeight="bold">{field.label}</Typography>
               <TextField
                 name={field.name}
-                value={
-                  isEditing ? editedProfile[field.name] : profile[field.name]
-                }
+                value={isEditing ? editedProfile[field.name] : profile[field.name]}
                 onChange={handleChange}
                 fullWidth
                 disabled={!isEditing}
                 error={!!errors[field.name]}
                 helperText={errors[field.name]}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderColor: "#3e4b32" },
-                    "&:hover fieldset": { borderColor: "#738A6E" },
-                    "&.Mui-focused fieldset": { borderColor: "#738A6E" },
-                  },
-                  input: {
-                    borderRadius: 1,
-                    bgcolor: "white",
-                  },
-                }}
               />
             </Box>
           ))}
 
-          {/* Password Field with Toggle Visibility */}
           <Box>
             <Typography fontWeight="bold">Password</Typography>
             <TextField
+              id="password"
               name="password"
+              label="Password"
               type={showPassword ? "text" : "password"}
               value={isEditing ? editedProfile.password : profile.password}
               onChange={handleChange}
@@ -217,28 +159,15 @@ const PatientProfile = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={handleTogglePassword} edge="end">
+                    <IconButton onClick={handleTogglePassword} edge="end" aria-label="toggle password visibility">
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": { borderColor: "#3e4b32" },
-                  "&:hover fieldset": { borderColor: "#738A6E" },
-                  "&.Mui-focused fieldset": { borderColor: "#738A6E" },
-                },
-                input: {
-                  borderRadius: "5px",
-                  padding: "10px",
-                  bgcolor: "white",
-                },
-              }}
             />
           </Box>
 
-          {/* Update Information Button */}
           <Box display="flex" justifyContent="flex-start" mt={2}>
             <Button
               variant="contained"
@@ -248,9 +177,7 @@ const PatientProfile = () => {
                 color: "#fff",
                 textTransform: "none",
                 fontWeight: "bold",
-                "&:hover": {
-                  bgcolor: "#79886C",
-                },
+                "&:hover": { bgcolor: "#79886C" },
               }}
             >
               {isEditing ? "Save Changes" : "Update Information"}
@@ -258,8 +185,35 @@ const PatientProfile = () => {
           </Box>
         </Box>
       </Paper>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={confirmDialogOpen} onClose={() => setConfirmDialogOpen(false)}>
+        <DialogTitle>Confirm Changes</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Are you sure you want to save these changes?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleConfirmSave} variant="contained" color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={successMessageOpen}
+        autoHideDuration={3000}
+        onClose={() => setSuccessMessageOpen(false)}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          Profile updated successfully!
+        </Alert>
+      </Snackbar>
     </Box>
   );
-}
+};
 
 export default PatientProfile;
+
+

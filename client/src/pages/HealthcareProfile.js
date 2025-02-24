@@ -14,7 +14,7 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  Autocomplete
+  Autocomplete,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -36,7 +36,7 @@ const HpProfile = () => {
     mincNumber: "CAMD-1234-5679",
     hospital: "Hospital 1",
     specialty: "Cardiology",
-    password: "Default@123"
+    password: "Default@123",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -54,8 +54,8 @@ const HpProfile = () => {
 
   // Handle dropdown changes
   const handleDropdownChange = (name, value) => {
-    setEditedProfile({ ...editedProfile, [name]: value });
-    setErrors({ ...errors, [name]: "" });
+    setEditedProfile({ ...editedProfile, [name]: value || "" });
+    setErrors({ ...errors, [name]: value ? "" : "This field is required" });
   };
 
   // Toggle password visibility
@@ -65,24 +65,23 @@ const HpProfile = () => {
 
   // Open confirmation dialog before saving
   const handleSaveClick = () => {
-    setConfirmDialogOpen(true);
-  };
-
-  // Confirm and save changes
-  const handleConfirmSave = () => {
     let newErrors = {};
     Object.keys(editedProfile).forEach((field) => {
-      if (!editedProfile[field].trim()) {
+      if (!editedProfile[field]?.trim()) {
         newErrors[field] = "This field is required";
       }
     });
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setConfirmDialogOpen(false);
       return;
     }
 
+    setConfirmDialogOpen(true);
+  };
+
+  // Confirm and save changes
+  const handleConfirmSave = () => {
     setProfile(editedProfile);
     setIsEditing(false);
     setConfirmDialogOpen(false);
@@ -97,13 +96,12 @@ const HpProfile = () => {
           p: "2rem",
           width: "100%",
           maxWidth: "600px",
-          bgcolor: "#f7f9f6",
+          bgcolor: "#fff",
           border: "1px solid #b0b8a6",
           borderRadius: "8px",
           boxShadow: "none",
         }}
       >
-        
         <Typography variant="h5" fontWeight="bold" mb={3}>
           Your Profile
         </Typography>
@@ -143,86 +141,54 @@ const HpProfile = () => {
         {/* Hospital Selection */}
         <Box mt={2}>
           <Typography fontWeight="bold">Hospital</Typography>
-          {isEditing ? (
-            <Autocomplete
-              freeSolo
-              options={hospitals}
-              value={editedProfile.hospital}
-              onChange={(event, newValue) => handleDropdownChange("hospital", newValue)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="hospital"
-                  fullWidth
-                  error={!!errors.hospital}
-                  helperText={errors.hospital}
-                />
-              )}
-            />
-          ) : (
-            <TextField
-              name="hospital"
-              value={profile.hospital}
-              fullWidth
-              disabled
-            />
-          )}
+          <Autocomplete
+            options={hospitals}
+            value={editedProfile.hospital}
+            onChange={(event, newValue) => handleDropdownChange("hospital", newValue)}
+            disabled={!isEditing}
+            renderInput={(params) => (
+              <TextField {...params} name="hospital" fullWidth error={!!errors.hospital} helperText={errors.hospital} />
+            )}
+          />
         </Box>
 
         {/* Specialty Selection */}
         <Box mt={2}>
           <Typography fontWeight="bold">Specialty</Typography>
-          {isEditing ? (
-            <Autocomplete
-              options={specialties}
-              value={editedProfile.specialty}
-              onChange={(event, newValue) => handleDropdownChange("specialty", newValue)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  name="specialty"
-                  fullWidth
-                  error={!!errors.specialty}
-                  helperText={errors.specialty}
-                />
-              )}
-            />
-          ) : (
-            <TextField
-              name="specialty"
-              value={profile.specialty}
-              fullWidth
-              disabled
-            />
-          )}
+          <Autocomplete
+            options={specialties}
+            value={editedProfile.specialty}
+            onChange={(event, newValue) => handleDropdownChange("specialty", newValue)}
+            disabled={!isEditing}
+            renderInput={(params) => (
+              <TextField {...params} name="specialty" fullWidth error={!!errors.specialty} helperText={errors.specialty} />
+            )}
+          />
         </Box>
 
-        
-
-                {/* Password Field */}
-                <Box mt={2}>
-                  <Typography fontWeight="bold">Password</Typography>
-                  <TextField
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    value={isEditing ? editedProfile.password : profile.password}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    fullWidth
-                    error={!!errors.password}
-                    helperText={errors.password}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton onClick={handleTogglePassword} edge="end">
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Box>
-
+        {/* Password Field */}
+        <Box mt={2}>
+          <Typography fontWeight="bold">Password</Typography>
+          <TextField
+            name="password"
+            type={showPassword ? "text" : "password"}
+            value={isEditing ? editedProfile.password : profile.password}
+            onChange={handleChange}
+            disabled={!isEditing}
+            fullWidth
+            error={!!errors.password}
+            helperText={errors.password}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleTogglePassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
 
         <Box display="flex" justifyContent="flex-start" mt={2}>
           <Button
@@ -250,11 +216,17 @@ const HpProfile = () => {
           <Button onClick={handleConfirmSave} color="primary">Confirm</Button>
         </DialogActions>
       </Dialog>
+
+      {/* Success Snackbar */}
+      <Snackbar open={successMessageOpen} autoHideDuration={3000} onClose={() => setSuccessMessageOpen(false)}>
+        <Alert severity="success" sx={{ width: "100%" }}>Profile updated successfully!</Alert>
+      </Snackbar>
     </Box>
   );
 };
 
 export default HpProfile;
+
 
     
     
