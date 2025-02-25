@@ -44,6 +44,6 @@ const App = () => {
       </Router>
     </FirebaseContext.Provider>
   );
-};
+}
 
 export default App;
