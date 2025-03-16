@@ -1,9 +1,12 @@
 import React from 'react';
 import {Box, Container, Typography, Paper, Button} from '@mui/material';
-
+import { useNavigate } from 'react-router-dom';
 export default function HomePage() {
   const userName = 'Sarah Johnson';
-
+  const navigate = useNavigate();
+  const handleBookAppointment = () => {
+    navigate('/hospital-search');
+  }
   return (
     <Box
       sx={{
@@ -67,6 +70,7 @@ export default function HomePage() {
               '&:hover': {bgcolor: '#2f3b26'},
               borderRadius: 2,
             }}
+            onClick={handleBookAppointment}
           >
             Book Appointment
           </Button>

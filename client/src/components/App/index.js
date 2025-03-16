@@ -18,6 +18,7 @@ import HomePage from '../../pages/HomePage';
 import SignInFormHP from '../../pages/SignInFormHP';
 import SignInFormP from '../../pages/SignInFormP';
 import HealthcareProfile from '../../pages/HealthcareProfile';
+import HospitalSearch from '../../pages/HospitalSearch';
 // Initializing Firebase
 const firebase = new Firebase();
 
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/ConfirmationVerifyH" element={<ConfirmationVerifyH />} />
           <Route path="/hp-signin" element={<SignInFormHP />} />
           <Route path="/p-signin" element={<SignInFormP />} />
+          <Route path="/hospital-search" element={<HospitalSearch />} />
         </Routes>
       </Router>
     </FirebaseContext.Provider>
