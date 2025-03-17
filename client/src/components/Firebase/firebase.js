@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Import Firebase modules using the new modular syntax
 import {initializeApp} from 'firebase/app';
 import {
@@ -10,6 +11,10 @@ import {
   getIdToken,
   fetchSignInMethodsForEmail,
 } from 'firebase/auth';
+=======
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, updatePassword } from 'firebase/auth';
+>>>>>>> main
 
 // Firebase configuration
 const firebaseConfig = {
