@@ -1,6 +1,6 @@
 // src/app/App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import FirebaseContext from '../Firebase/context'; // Importing Firebase context
 import Firebase from '../Firebase/firebase'; // Importing Firebase instance
 
@@ -14,7 +14,7 @@ import MedicalHistory from '../../pages/MedicalHistory';
 import BookingsPage from '../../pages/BookingsPage';
 import LandingPage from '../../pages/Landing';
 import ConfirmationVerifyH from '../../pages/ConfirmationVerifyH';
-import HomePage from '../../pages/HomePage';
+import PatientDashboard from '../../pages/PatientDashboard';
 import SignInFormHP from '../../pages/SignInFormHP';
 import SignInFormP from '../../pages/SignInFormP';
 import HealthcareProfile from '../../pages/HealthcareProfile';
@@ -23,7 +23,9 @@ const firebase = new Firebase();
 
 const App = () => {
   return (
-    <FirebaseContext.Provider value={firebase}> {/* Provide Firebase to the app */}
+    <FirebaseContext.Provider value={firebase}>
+      {' '}
+      {/* Provide Firebase to the app */}
       <Router>
         <NavBar />
         <Routes>
@@ -35,15 +37,18 @@ const App = () => {
           <Route path="/SignUpPatient" element={<SignUpPatient />} />
           <Route path="/bookings" element={<BookingsPage />} />
           <Route path="/Landing" element={<LandingPage />} />
-          <Route path="/Home" element={<HomePage />} />
+          <Route path="/PatientDashboard" element={<PatientDashboard />} />
           <Route path="/SignUpHP" element={<SignupFormH />} />
-          <Route path="/ConfirmationVerifyH" element={<ConfirmationVerifyH />} />
+          <Route
+            path="/ConfirmationVerifyH"
+            element={<ConfirmationVerifyH />}
+          />
           <Route path="/hp-signin" element={<SignInFormHP />} />
           <Route path="/p-signin" element={<SignInFormP />} />
         </Routes>
       </Router>
     </FirebaseContext.Provider>
   );
-}
+};
 
 export default App;
