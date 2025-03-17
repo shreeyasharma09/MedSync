@@ -282,6 +282,6 @@ const MedicalHistory = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default MedicalHistory;
