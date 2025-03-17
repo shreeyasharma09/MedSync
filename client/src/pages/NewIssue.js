@@ -125,7 +125,7 @@ export default function NewIssue() {
     });
 
     if (response.ok) {
-      navigate('/old-issues'); // Redirect to old issues after submission
+      navigate('/hospital-search'); // Redirect to old issues after submission
     } else {
       console.error('Failed to submit issue');
     }
@@ -246,3 +246,6 @@ export default function NewIssue() {
     </Container>
   );
 }
+
+
+
