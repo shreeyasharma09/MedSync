@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Container, Typography, Paper, Button} from '@mui/material';
 
-export default function PatientDashboard() {
+export default function HomePage() {
   const userName = 'Sarah Johnson';
 
   return (
