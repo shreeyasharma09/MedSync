@@ -38,6 +38,7 @@ function SignInFormHP() {
         formData.password,
       );
       console.log('User signed in successfully!');
+      localStorage.setItem('userRole', 'healthcare');
       navigate('/profile/hp'); // Redirect user to the main dashboard after successful sign-in
     } catch (err) {
       setError(err.message); // Set error message
