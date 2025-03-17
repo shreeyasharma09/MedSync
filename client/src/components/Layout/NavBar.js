@@ -33,7 +33,7 @@ const NavBar = () => {
   const profilePath =
     userRole === 'patient' ? '/profile/view-profile' : '/profile/hp';
   const dashboardPath = userRole === 'patient' ? '/PatientDashboard' : '/';
-  const bookingsPath = userRole === 'patient' ? '/' : '/HealthcareBookings';
+  const bookingsPath = userRole === 'patient' ? '/HealthcareBookings' : '/HealthcareBookings';
 
   return (
     <AppBar

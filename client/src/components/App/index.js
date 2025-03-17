@@ -19,6 +19,7 @@ import SignInFormHP from '../../pages/SignInFormHP';
 import SignInFormP from '../../pages/SignInFormP';
 import HealthcareProfile from '../../pages/HealthcareProfile';
 import HealthcareDashboard from '../../pages/HealthcareDashboard';
+import HealthcareBookings from '../../pages/HealthcareBookings';
 // Initializing Firebase
 const firebase = new Firebase();
 
@@ -43,6 +44,7 @@ const App = () => {
             path="/HealthcareDashboard"
             element={<HealthcareDashboard />}
           />
+          <Route path='HealthcareBookings' element={<HealthcareBookings />} />
           <Route path="/SignUpHP" element={<SignupFormH />} />
           <Route
             path="/ConfirmationVerifyH"
