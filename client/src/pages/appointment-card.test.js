@@ -1,13 +1,14 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react"
-import "@testing-library/jest-dom" // Add this import directly to the test file
-import { AppointmentCard } from "./appointment-card"
-import { updateAppointment, deleteAppointment } from "./appointment-actions"
+import React from 'react';
+import {render, screen, fireEvent, waitFor} from '@testing-library/react';
+import {AppointmentCard} from './appointment-card';
+import {updateAppointment, deleteAppointment} from './appointment-actions';
 
-// Mock the dependencies
-jest.mock("./appointment-actions", () => ({
-  updateAppointment: jest.fn().mockResolvedValue({ success: true }),
-  deleteAppointment: jest.fn().mockResolvedValue({ success: true }),
-}))
+// Mock the appointment actions
+jest.mock('./appointment-actions', () => ({
+  updateAppointment: jest.fn().mockResolvedValue({success: true}),
+  deleteAppointment: jest.fn().mockResolvedValue({success: true}),
+}));
+
 
 // Sample appointment data for testing
 const mockAppointment = {
@@ -22,6 +23,7 @@ const mockOnUpdate = jest.fn()
 
 describe("AppointmentCard Component", () => {
   beforeEach(() => {
+    
     jest.clearAllMocks()
   })
 

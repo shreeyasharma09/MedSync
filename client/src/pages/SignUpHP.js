@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState, useContext} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
   TextField,
   Button,
@@ -12,7 +12,7 @@ import {
   InputAdornment,
   MenuItem,
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import {Visibility, VisibilityOff} from '@mui/icons-material';
 import FirebaseContext from '../components/Firebase/context'; // Import Firebase context
 
 const hospitals = ['Hospital 1', 'Hospital 2', 'Hospital 3'];
@@ -68,34 +68,39 @@ const SignupFormHP = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // State for error messages
 
-  const handleChange = (event) => {
-    setFormValues({ ...formValues, [event.target.name]: event.target.value });
-    setErrors({ ...errors, [event.target.name]: '' });
+  const handleChange = event => {
+    setFormValues({...formValues, [event.target.name]: event.target.value});
+    setErrors({...errors, [event.target.name]: ''});
   };
 
   // Handle submit with FB
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     let newErrors = {};
     let hasErrors = false;
 
-    Object.keys(formValues).forEach((field) => {
+    Object.keys(formValues).forEach(field => {
       if (!formValues[field]) {
         newErrors[field] = 'This field is required';
         hasErrors = true;
       }
     });
-  
+
     setErrors(newErrors);
-  
+
     if (!hasErrors) {
       setLoading(true);
       setError(null);
-  
+
       try {
-        await firebase.doCreateUserWithEmailAndPassword(formValues.mincNumber, formValues.password);
-        console.log("Healthcare Professional created successfully in Firebase!");
-  
+        await firebase.doCreateUserWithEmailAndPassword(
+          formValues.mincNumber,
+          formValues.password,
+        );
+        console.log(
+          'Healthcare Professional created successfully in Firebase!',
+        );
+
         const response = await fetch('/api/healthProfSignup', {
           method: 'POST',
           headers: {
@@ -111,12 +116,14 @@ const SignupFormHP = () => {
             password: formValues.password,
           }),
         });
-  
+
         if (!response.ok) {
           throw new Error('Failed to create account in backend');
         }
-  
-        console.log('Healthcare Professional registered successfully in backend!');
+
+        console.log(
+          'Healthcare Professional registered successfully in backend!',
+        );
         navigate('/ConfirmationVerifyH');
       } catch (err) {
         setError(err.message); // Display error message
@@ -126,10 +133,9 @@ const SignupFormHP = () => {
       }
     }
   };
-  
 
   const handleClickShowPassword = () => {
-    setShowPassword((prev) => !prev);
+    setShowPassword(prev => !prev);
   };
 
   return (
@@ -157,7 +163,7 @@ const SignupFormHP = () => {
           <Typography
             variant="h5"
             align="center"
-            style={{ color: '#3e4b32', fontWeight: '600' }}
+            style={{color: '#3e4b32', fontWeight: '600'}}
             gutterBottom
           >
             Create your new <strong>Healthcare Professional</strong> account
@@ -165,14 +171,18 @@ const SignupFormHP = () => {
           <Typography
             variant="body2"
             align="center"
-            style={{ color: '#7d8a6a' }}
+            style={{color: '#7d8a6a'}}
             gutterBottom
           >
             Please fill in your information to create your account
           </Typography>
 
           {error && ( // Display an error message
-            <Typography color="error" align="center" style={{ marginBottom: '1rem' }}>
+            <Typography
+              color="error"
+              align="center"
+              style={{marginBottom: '1rem'}}
+            >
               {error}
             </Typography>
           )}
@@ -230,8 +240,8 @@ const SignupFormHP = () => {
                   onChange={handleChange}
                   error={!!errors.dob}
                   helperText={errors.dob}
-                  InputLabelProps={{ shrink:true }}
-                  InputProps={{ style: { borderRadius: '8px' } }}
+                  InputLabelProps={{shrink: true}}
+                  InputProps={{style: {borderRadius: '8px'}}}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -246,7 +256,7 @@ const SignupFormHP = () => {
                   error={!!errors.hospital}
                   helperText={errors.hospital}
                 >
-                  {hospitals.map((hospital) => (
+                  {hospitals.map(hospital => (
                     <MenuItem key={hospital} value={hospital}>
                       {hospital}
                     </MenuItem>
@@ -265,7 +275,7 @@ const SignupFormHP = () => {
                   error={!!errors.specialty}
                   helperText={errors.specialty}
                 >
-                  {specialties.map((specialty) => (
+                  {specialties.map(specialty => (
                     <MenuItem key={specialty} value={specialty}>
                       {specialty}
                     </MenuItem>
@@ -286,7 +296,10 @@ const SignupFormHP = () => {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton onClick={handleClickShowPassword} edge="end">
+                        <IconButton
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
                           {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
@@ -316,7 +329,7 @@ const SignupFormHP = () => {
           <Typography
             variant="body2"
             align="center"
-            style={{ marginTop: '2rem', paddingBottom: '1rem', color: '#7d8a6a' }}
+            style={{marginTop: '2rem', paddingBottom: '1rem', color: '#7d8a6a'}}
           >
             Already have an account?{' '}
             <Link

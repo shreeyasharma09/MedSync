@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import { useState } from "react"
+import {useState} from 'react';
 import {
   Box,
   Card,
@@ -16,132 +16,138 @@ import {
   TextField,
   InputLabel,
   Grid,
-} from "@mui/material"
-import { CalendarMonth, AccessTime, Edit, Delete } from "@mui/icons-material"
-import { format, parse } from "date-fns"
-import { updateAppointment, deleteAppointment } from "./appointment-actions"
+} from '@mui/material';
+import {CalendarMonth, AccessTime, Edit, Delete} from '@mui/icons-material';
+import {format, parse} from 'date-fns';
+import {updateAppointment, deleteAppointment} from './appointment-actions';
 
-export function AppointmentCard({ appointment, onUpdate }) {
-  const [isEditOpen, setIsEditOpen] = useState(false)
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+export function AppointmentCard({appointment, onUpdate}) {
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [formData, setFormData] = useState({
     date: appointment.date,
     time: appointment.time,
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Format the date for display
   const displayDate = () => {
     try {
-      const parsedDate = parse(appointment.date, "dd-MM-yyyy", new Date())
-      return format(parsedDate, "MMMM d, yyyy")
+      const parsedDate = parse(appointment.date, 'dd-MM-yyyy', new Date());
+      return format(parsedDate, 'MMMM d, yyyy');
     } catch (error) {
-      return appointment.date
+      return appointment.date;
     }
-  }
+  };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleInputChange = e => {
+    const {name, value} = e.target;
+    setFormData(prev => ({...prev, [name]: value}));
+  };
 
   const handleUpdate = async () => {
     try {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
       await updateAppointment({
         id: appointment.id,
         date: formData.date,
         time: formData.time,
-      })
-      setIsEditOpen(false)
-      onUpdate()
+      });
+      setIsEditOpen(false);
+      onUpdate();
     } catch (error) {
-      console.error("Failed to update appointment:", error)
+      console.error('Failed to update appointment:', error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleDelete = async () => {
     try {
-      setIsSubmitting(true)
-      await deleteAppointment(appointment.id)
-      setIsDeleteOpen(false)
-      onUpdate()
+      setIsSubmitting(true);
+      await deleteAppointment(appointment.id);
+      setIsDeleteOpen(false);
+      onUpdate();
     } catch (error) {
-      console.error("Failed to delete appointment:", error)
+      console.error('Failed to delete appointment:', error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleCloseEditDialog = () => {
-    setIsEditOpen(false)
-  }
+    setIsEditOpen(false);
+  };
 
   const handleCloseDeleteDialog = () => {
-    setIsDeleteOpen(false)
-  }
+    setIsDeleteOpen(false);
+  };
 
   return (
     <>
       <Card
         sx={{
-          width: "100%",
-          cursor: "pointer",
-          transition: "box-shadow 0.3s",
-          "&:hover": {
+          width: '100%',
+          cursor: 'pointer',
+          transition: 'box-shadow 0.3s',
+          '&:hover': {
             boxShadow: 3,
           },
         }}
         onClick={() => setIsEditOpen(true)}
       >
-        <CardContent sx={{ padding: 2.5 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <CardContent sx={{padding: 2.5}}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+            }}
+          >
             <Box>
-              <Typography variant="h6" sx={{ fontWeight: 600, color: "#3e4b32" }}>
+              <Typography variant="h6" sx={{fontWeight: 600, color: '#3e4b32'}}>
                 {appointment.doctorName}
               </Typography>
-              <Typography variant="body2" sx={{ color: "#7d8a6a" }}>
+              <Typography variant="body2" sx={{color: '#7d8a6a'}}>
                 {appointment.specialty}
               </Typography>
             </Box>
           </Box>
-          <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-            <Box sx={{ display: "flex", alignItems: "center", color: "#7d8a6a" }}>
-              <CalendarMonth sx={{ fontSize: 16, mr: 1 }} />
+          <Box sx={{mt: 2, display: 'flex', flexDirection: 'column', gap: 1}}>
+            <Box sx={{display: 'flex', alignItems: 'center', color: '#7d8a6a'}}>
+              <CalendarMonth sx={{fontSize: 16, mr: 1}} />
               <Typography variant="body2">{displayDate()}</Typography>
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center", color: "#7d8a6a" }}>
-              <AccessTime sx={{ fontSize: 16, mr: 1 }} />
+            <Box sx={{display: 'flex', alignItems: 'center', color: '#7d8a6a'}}>
+              <AccessTime sx={{fontSize: 16, mr: 1}} />
               <Typography variant="body2">{appointment.time}</Typography>
             </Box>
           </Box>
         </CardContent>
         <CardActions
           sx={{
-            bgcolor: "#f7f9f6",
+            bgcolor: '#f7f9f6',
             padding: 1.5,
-            display: "flex",
-            justifyContent: "flex-end",
+            display: 'flex',
+            justifyContent: 'flex-end',
             gap: 1,
           }}
         >
           <Button
             variant="outlined"
             size="small"
-            startIcon={<Edit sx={{ fontSize: 16 }} />}
+            startIcon={<Edit sx={{fontSize: 16}} />}
             sx={{
-              color: "#3e4b32",
-              borderColor: "#3e4b32",
-              "&:hover": {
-                borderColor: "#3e4b32",
-                backgroundColor: "rgba(62, 75, 50, 0.04)",
+              color: '#3e4b32',
+              borderColor: '#3e4b32',
+              '&:hover': {
+                borderColor: '#3e4b32',
+                backgroundColor: 'rgba(62, 75, 50, 0.04)',
               },
             }}
-            onClick={(e) => {
-              e.stopPropagation()
-              setIsEditOpen(true)
+            onClick={e => {
+              e.stopPropagation();
+              setIsEditOpen(true);
             }}
           >
             Edit
@@ -149,18 +155,18 @@ export function AppointmentCard({ appointment, onUpdate }) {
           <Button
             variant="outlined"
             size="small"
-            startIcon={<Delete sx={{ fontSize: 16 }} />}
+            startIcon={<Delete sx={{fontSize: 16}} />}
             sx={{
-              color: "#d32f2f",
-              borderColor: "#d32f2f",
-              "&:hover": {
-                borderColor: "#d32f2f",
-                backgroundColor: "rgba(211, 47, 47, 0.04)",
+              color: '#d32f2f',
+              borderColor: '#d32f2f',
+              '&:hover': {
+                borderColor: '#d32f2f',
+                backgroundColor: 'rgba(211, 47, 47, 0.04)',
               },
             }}
-            onClick={(e) => {
-              e.stopPropagation()
-              setIsDeleteOpen(true)
+            onClick={e => {
+              e.stopPropagation();
+              setIsDeleteOpen(true);
             }}
           >
             Cancel
@@ -169,12 +175,17 @@ export function AppointmentCard({ appointment, onUpdate }) {
       </Card>
 
       {/* Edit Appointment Dialog */}
-      <Dialog open={isEditOpen} onClose={handleCloseEditDialog} maxWidth="xs" fullWidth>
+      <Dialog
+        open={isEditOpen}
+        onClose={handleCloseEditDialog}
+        maxWidth="xs"
+        fullWidth
+      >
         <DialogTitle>Edit Appointment</DialogTitle>
         <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
+          <Grid container spacing={2} sx={{mt: 1}}>
             <Grid item xs={12}>
-              <InputLabel htmlFor="date" sx={{ mb: 1 }}>
+              <InputLabel htmlFor="date" sx={{mb: 1}}>
                 Date
               </InputLabel>
               <TextField
@@ -188,7 +199,7 @@ export function AppointmentCard({ appointment, onUpdate }) {
               />
             </Grid>
             <Grid item xs={12}>
-              <InputLabel htmlFor="time" sx={{ mb: 1 }}>
+              <InputLabel htmlFor="time" sx={{mb: 1}}>
                 Time
               </InputLabel>
               <TextField
@@ -211,29 +222,35 @@ export function AppointmentCard({ appointment, onUpdate }) {
             onClick={handleUpdate}
             disabled={isSubmitting}
             sx={{
-              bgcolor: "#3E4B32",
-              color: "white",
-              "&:hover": {
-                bgcolor: "#2f3b26",
+              bgcolor: '#3E4B32',
+              color: 'white',
+              '&:hover': {
+                bgcolor: '#2f3b26',
               },
-              "&.Mui-disabled": {
-                bgcolor: "#3E4B32",
+              '&.Mui-disabled': {
+                bgcolor: '#3E4B32',
                 opacity: 0.7,
-                color: "white",
+                color: 'white',
               },
             }}
           >
-            {isSubmitting ? "Saving..." : "Save Changes"}
+            {isSubmitting ? 'Saving...' : 'Save Changes'}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteOpen} onClose={handleCloseDeleteDialog} maxWidth="xs" fullWidth>
+      <Dialog
+        open={isDeleteOpen}
+        onClose={handleCloseDeleteDialog}
+        maxWidth="xs"
+        fullWidth
+      >
         <DialogTitle>Cancel Appointment</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to cancel this appointment? This action cannot be undone.
+            Are you sure you want to cancel this appointment? This action cannot
+            be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -244,23 +261,22 @@ export function AppointmentCard({ appointment, onUpdate }) {
             onClick={handleDelete}
             disabled={isSubmitting}
             sx={{
-              bgcolor: "#d32f2f",
-              color: "white",
-              "&:hover": {
-                bgcolor: "#b71c1c",
+              bgcolor: '#d32f2f',
+              color: 'white',
+              '&:hover': {
+                bgcolor: '#b71c1c',
               },
-              "&.Mui-disabled": {
-                bgcolor: "#d32f2f",
+              '&.Mui-disabled': {
+                bgcolor: '#d32f2f',
                 opacity: 0.7,
-                color: "white",
+                color: 'white',
               },
             }}
           >
-            {isSubmitting ? "Cancelling..." : "Yes, Cancel It"}
+            {isSubmitting ? 'Cancelling...' : 'Yes, Cancel It'}
           </Button>
         </DialogActions>
       </Dialog>
     </>
-  )
+  );
 }
-
