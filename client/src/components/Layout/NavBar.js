@@ -33,6 +33,7 @@ const NavBar = () => {
   const profilePath =
     userRole === 'patient' ? '/profile/view-profile' : '/profile/hp';
   const dashboardPath = userRole === 'patient' ? '/PatientDashboard' : '/';
+  const bookingsPath = userRole === 'patient' ? '/' : '/HealthcareBookings';
 
   return (
     <AppBar
@@ -47,6 +48,7 @@ const NavBar = () => {
         <Box>
           <NavLink to="/Landing" label="Landing" />
           <NavLink to={dashboardPath} label="Dashboard" />
+          <NavLink to={bookingsPath} label="Bookings" />
           <NavLink to={profilePath} label="Profile" />
         </Box>
       </Toolbar>

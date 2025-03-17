@@ -18,6 +18,7 @@ import PatientDashboard from '../../pages/PatientDashboard';
 import SignInFormHP from '../../pages/SignInFormHP';
 import SignInFormP from '../../pages/SignInFormP';
 import HealthcareProfile from '../../pages/HealthcareProfile';
+import HealthcareDashboard from '../../pages/HealthcareDashboard';
 // Initializing Firebase
 const firebase = new Firebase();
 
@@ -38,6 +39,10 @@ const App = () => {
           <Route path="/bookings" element={<BookingsPage />} />
           <Route path="/Landing" element={<LandingPage />} />
           <Route path="/PatientDashboard" element={<PatientDashboard />} />
+          <Route
+            path="/HealthcareDashboard"
+            element={<HealthcareDashboard />}
+          />
           <Route path="/SignUpHP" element={<SignupFormH />} />
           <Route
             path="/ConfirmationVerifyH"
