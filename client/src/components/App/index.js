@@ -18,8 +18,13 @@ import PatientDashboard from '../../pages/PatientDashboard';
 import SignInFormHP from '../../pages/SignInFormHP';
 import SignInFormP from '../../pages/SignInFormP';
 import HealthcareProfile from '../../pages/HealthcareProfile';
+import HospitalSearch from '../../pages/HospitalSearch';
 import HealthcareDashboard from '../../pages/HealthcareDashboard';
 import HealthcareBookings from '../../pages/HealthcareBookings';
+import IssueSelection from '../../pages/IssueSelection';
+import NewIssue from '../../pages/NewIssue';
+import OldIssues from '../../pages/OldIssues';
+// import Recommendations from '../../pages/Recommendations';
 // Initializing Firebase
 const firebase = new Firebase();
 
@@ -52,6 +57,12 @@ const App = () => {
           />
           <Route path="/hp-signin" element={<SignInFormHP />} />
           <Route path="/p-signin" element={<SignInFormP />} />
+
+          <Route path="/issue-selection" element={<IssueSelection />} />
+          <Route path="/new-issue" element={<NewIssue />} />
+          <Route path="/old-issues" element={<OldIssues />} />
+          {/* <Route path="/recommendations/:issueId" element={<Recommendations />} /> */}
+          <Route path="/hospital-search" element={<HospitalSearch />} />
         </Routes>
       </Router>
     </FirebaseContext.Provider>

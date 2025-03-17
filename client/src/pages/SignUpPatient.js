@@ -36,35 +36,60 @@ const SignUpPatient = () => {
     setErrors({...errors, [event.target.name]: ''});
   };
 
+  // New Handle submit with fb
+
   const handleSubmit = async event => {
     event.preventDefault();
     let newErrors = {};
     let hasErrors = false;
+
+    // Validate form fields
     Object.keys(formValues).forEach(field => {
       if (!formValues[field]) {
         newErrors[field] = 'This field is required';
         hasErrors = true;
       }
     });
+
     setErrors(newErrors);
 
     if (!hasErrors) {
       setLoading(true);
-      setError(null); // Reset error state
+      setError(null);
 
       try {
-        // Create user with Firebase
         await firebase.doCreateUserWithEmailAndPassword(
           formValues.healthCard,
           formValues.password,
         );
-        console.log('User created successfully!');
-        navigate('/Home'); // Redirect user to the home page after successful sign-up
+        console.log('User created successfully in Firebase!');
+
+        const response = await fetch('/api/patientSignup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            healthCard: formValues.healthCard,
+            dob: formValues.dob,
+            firstName: formValues.firstName,
+            lastName: formValues.lastName,
+            address: formValues.address,
+            password: formValues.password,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create account in backend');
+        }
+
+        console.log('User registered successfully in backend!');
+        navigate('/Home');
       } catch (err) {
-        setError(err.message); // Set error message
+        setError(err.message); // Display error message
         console.error('Sign-up error:', err);
       } finally {
-        setLoading(false); // Reset the loading state
+        setLoading(false);
       }
     }
   };
@@ -143,11 +168,13 @@ const SignUpPatient = () => {
                   label="Date of Birth"
                   name="dob"
                   variant="outlined"
-                  placeholder="MM/DD/YYYY"
+                  // placeholder="MM/DD/YYYY"
                   value={formValues.dob}
                   onChange={handleChange}
                   error={!!errors.dob}
                   helperText={errors.dob}
+                  type="date"
+                  InputLabelProps={{shrink: true}}
                   InputProps={{style: {borderRadius: '8px'}}}
                 />
               </Grid>

@@ -11,12 +11,16 @@ import {
   Box,
   Paper,
   Container,
+  IconButton,
+  InputAdornment,
 } from '@mui/material';
+import {Visibility, VisibilityOff} from '@mui/icons-material';
 import FirebaseContext from '../components/Firebase/context'; // Import Firebase context
 
 function SignInFormHP() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     MINC: '',
     password: '',
@@ -54,6 +58,10 @@ function SignInFormHP() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(prev => !prev);
   };
 
   return (
@@ -94,7 +102,7 @@ function SignInFormHP() {
             Enter your email and password to access your account.
           </Typography>
 
-          {error && ( // Display a error message
+          {error && ( // Display an error message
             <Typography
               color="error"
               align="center"
@@ -126,7 +134,7 @@ function SignInFormHP() {
               <Grid item xs={12}>
                 <TextField
                   label="Password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   fullWidth
                   value={formData.password}
@@ -137,6 +145,18 @@ function SignInFormHP() {
                   helperText={
                     formData.password.length < 1 && 'This field is required'
                   }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleClickShowPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
 

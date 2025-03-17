@@ -1,8 +1,13 @@
+'use client';
+
 import React from 'react';
 import {Box, Container, Typography, Paper, Button} from '@mui/material';
+import {useNavigate} from 'react-router-dom';
+import {AppointmentsSection} from './appointments-section';
 
 export default function PatientDashboard() {
   const userName = 'Sarah Johnson';
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -67,6 +72,7 @@ export default function PatientDashboard() {
               '&:hover': {bgcolor: '#2f3b26'},
               borderRadius: 2,
             }}
+            onClick={() => navigate('/issue-selection')}
           >
             Book Appointment
           </Button>
@@ -78,22 +84,8 @@ export default function PatientDashboard() {
         >
           Upcoming Appointments
         </Typography>
-        <Paper
-          sx={{
-            py: 4,
-            textAlign: 'center',
-            borderRadius: 2,
-            border: '1px solid #d2d2d2',
-          }}
-          elevation={0}
-        >
-          <Typography sx={{color: '#7d8a6a', mb: 1}}>
-            You don’t have any upcoming appointments scheduled.
-          </Typography>
-          <Typography variant="body2" sx={{color: '#9c9c9c'}}>
-            Click the “Book Appointment” button above to schedule one.
-          </Typography>
-        </Paper>
+
+        <AppointmentsSection />
       </Container>
     </Box>
   );

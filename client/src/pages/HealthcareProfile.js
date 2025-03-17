@@ -55,7 +55,6 @@ const specialties = [
 ];
 
 const HpProfile = () => {
-  // Dummy profile data (Replace with API call)
   const [profile, setProfile] = useState({
     firstName: 'John',
     lastName: 'Doe',
