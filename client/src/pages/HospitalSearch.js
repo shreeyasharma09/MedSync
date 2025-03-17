@@ -2,35 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Container, Box } from '@mui/material';
 import axios from 'axios';
 import HospitalCard from './HospitalCard';
+import ExpertCard from './ExpertCard';
 import FilterControls from './FilterControls';
 
 const HospitalSearch = () => {
   const [hospitals, setHospitals] = useState([]);
+  const [filteredHospitals, setFilteredHospitals] = useState([]);
+  const [selectedExperts, setSelectedExperts] = useState([]);
   const [maxDistance, setMaxDistance] = useState(10);
   const [rating, setRating] = useState('');
-  const [specialty, setSpecialty] = useState('');
-  const issue = 'Kidney Stones'; // Example issue for now
+  const issue = 'Kidney Stones';
 
   useEffect(() => {
     const fetchLocationAndHospitals = async () => {
       try {
-        // Fetch user location directly from ip-api
-        const locationRes = await axios.get('http://ip-api.com/json/');
-        const locationData = {
-          lat: locationRes.data.lat,
-          lon: locationRes.data.lon,
-        }
-
-        // Fetch hospitals sorted by distance and rating from the backend
-        const hospitalRes = await axios.get(`/api/hospitals`, {
+        const locationData = { lat: 43.41, lon: -80.55 }; //needs to be replaced with geolocation api
+        const hospitalRes = await axios.get('/api/hospitals', {
           params: {
             lat: locationData.lat,
             lon: locationData.lon,
             issue,
           },
         });
-
+        console.log(hospitalRes.data)
         setHospitals(hospitalRes.data);
+        setFilteredHospitals(hospitalRes.data);
       } catch (error) {
         console.error('Error fetching hospitals:', error);
       }
@@ -38,6 +34,28 @@ const HospitalSearch = () => {
 
     fetchLocationAndHospitals();
   }, []);
+
+  useEffect(() => {
+    const filtered = hospitals.filter((hospital) => {
+      const withinDistance = hospital.distance <= maxDistance;
+      const meetsRating = rating === '' || hospital.rating >= rating;
+      return withinDistance && meetsRating;
+    });
+    setFilteredHospitals(filtered);
+  }, [maxDistance, rating, hospitals]);
+
+  // Function to fetch experts when a hospital is selected
+  const fetchExperts = async (hosp_id) => {
+    try {
+      const res = await axios.get(`/api/experts`, { params: { hosp_id } });
+      setSelectedExperts(res.data);
+    } catch (error) {
+      console.error('Error fetching experts:', error);
+    }
+  };
+  const handleCloseExpertCard = () => {
+    setSelectedExperts([]);
+  };
 
   return (
     <Container maxWidth="md" sx={{ my: 5 }}>
@@ -50,32 +68,30 @@ const HospitalSearch = () => {
         setMaxDistance={setMaxDistance}
         rating={rating}
         setRating={setRating}
-        specialty={specialty}
-        setSpecialty={setSpecialty}
       />
 
-      <Box sx={{ mt: 4 }}>
-        {hospitals.length > 0 ? (
-          hospitals.map((hospital, index) => (
+      <Box sx={{ display: 'flex', gap: 3, mt: 4 }}>
+        <Box sx={{ flex: 2 }}>
+          {filteredHospitals.map((hospital) => (
             <HospitalCard
-              key={index}
+              key={hospital.hosp_id}
+              hosp_id={hospital.hosp_id}
               name={hospital.name}
               distance={hospital.distance}
               expertCount={hospital.expertCount}
               rating={hospital.rating}
+              onSelectHospital={fetchExperts}
             />
-          ))
-        ) : (
-          <Typography variant="body1" sx={{ color: '#D32F2F', fontWeight: 'bold' }}>
-            No hospitals match your criteria.
-          </Typography>
-        )}
+          ))}
+        </Box>
+
+        {/* Render Expert Card beside hospitals */}
+        {selectedExperts.length > 0 && <ExpertCard experts={selectedExperts} onClose={handleCloseExpertCard} />}
       </Box>
     </Container>
   );
 };
 
 export default HospitalSearch;
-
 
 

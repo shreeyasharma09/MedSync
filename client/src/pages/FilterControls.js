@@ -12,7 +12,7 @@ const FilterControls = ({ maxDistance, setMaxDistance, rating, setRating }) => {
         alignItems: 'center',
       }}
     >
-      {/* Travel Distance Filter */}
+      {/* Distance Filter */}
       <FormControl
         variant="outlined"
         sx={{
@@ -20,28 +20,30 @@ const FilterControls = ({ maxDistance, setMaxDistance, rating, setRating }) => {
           bgcolor: '#F5F7F2',
           borderRadius: 2,
           '& .MuiOutlinedInput-root': {
-            '& fieldset': { borderColor: '#6b7d5f' }, // Second darkest from palette
+            '& fieldset': { borderColor: '#6b7d5f' },
             '&:hover fieldset': { borderColor: '#6b7d5f' },
-            '&.Mui-focused fieldset': { borderColor: '#6b7d5f' }, // When clicked
+            '&.Mui-focused fieldset': { borderColor: '#6b7d5f' },
           },
         }}
       >
         <InputLabel>Max Distance</InputLabel>
         <Select
+          data-testid="max-distance-select"
           value={maxDistance}
           onChange={(e) => setMaxDistance(e.target.value)}
           label="Max Distance"
           MenuProps={{
             PaperProps: {
               sx: {
-                bgcolor: '#E1E9D8', // Background color of hospital cards
+                bgcolor: '#E1E9D8',
               },
             },
           }}
         >
           <MenuItem value={5}>5 km</MenuItem>
           <MenuItem value={10}>10 km</MenuItem>
-          <MenuItem value={15}>Above 15 km</MenuItem>
+          <MenuItem value={15}>15 km</MenuItem>
+          <MenuItem value={100}>Above 15 km</MenuItem>
         </Select>
       </FormControl>
 
@@ -61,13 +63,14 @@ const FilterControls = ({ maxDistance, setMaxDistance, rating, setRating }) => {
       >
         <InputLabel>Minimum Rating</InputLabel>
         <Select
+          data-testid="rating-select" 
           value={rating}
           onChange={(e) => setRating(e.target.value)}
           label="Minimum Rating"
           MenuProps={{
             PaperProps: {
               sx: {
-                bgcolor: '#E1E9D8', // Background color of hospital cards
+                bgcolor: '#E1E9D8',
               },
             },
           }}
@@ -83,5 +86,7 @@ const FilterControls = ({ maxDistance, setMaxDistance, rating, setRating }) => {
 };
 
 export default FilterControls;
+
+
 
 

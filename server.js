@@ -5,7 +5,6 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bodyParser from 'body-parser';
-import axios from 'axios';
 import response from 'express';
 import { time } from 'console';
 
@@ -71,7 +70,7 @@ app.post('/api/loadUserSettings', (req, res) => {
 	  SELECT h.hosp_id, h.name, h.lat, h.lon, h.rating, 
 			 COUNT(hp.id) AS expertCount
 	  FROM issues i
-	  JOIN healthcare_professional hp ON i.specialty = hp.specialty
+	  JOIN healthcare_professionals hp ON i.specialty = hp.specialty
 	  JOIN hospital h ON hp.hospital = h.name
 	  WHERE i.issue = ?
 	  GROUP BY h.hosp_id
@@ -83,19 +82,44 @@ app.post('/api/loadUserSettings', (req, res) => {
 		return res.status(500).json({ error: 'Database query error' });
 	  }
   
-	  // Compute distances and sort hospitals
 	  const hospitalsWithDistance = results.map(hospital => {
 		const distance = getDistance(lat, lon, hospital.lat, hospital.lon);
-		return { ...hospital, distance };
+		return {
+		  ...hospital,
+		  distance: parseFloat(distance.toFixed(1)), // Round distance
+		};
 	  });
   
-	  // Sort by distance first, then rating
 	  hospitalsWithDistance.sort((a, b) => a.distance - b.distance || b.rating - a.rating);
   
 	  res.json(hospitalsWithDistance);
 	});
   });
-
+  
+  app.get('/api/experts', (req, res) => {
+	let connection = mysql.createConnection(config);
+	const { hosp_id } = req.query;
+  
+	if (!hosp_id) {
+	  return res.status(400).json({ error: 'Hospital ID is required' });
+	}
+  
+	const query = `
+	  SELECT first_name, last_name,specialty 
+	  FROM healthcare_professionals
+	  WHERE hospital IN (SELECT name FROM hospital WHERE hosp_id = ?)
+	`;
+  
+	connection.query(query, [hosp_id], (err, results) => {
+	  if (err) {
+		console.error('Error fetching experts:', err);
+		return res.status(500).json({ error: 'Database query error' });
+	  }
+  
+	  res.json(results);
+	});
+  });
+  
 
 
 

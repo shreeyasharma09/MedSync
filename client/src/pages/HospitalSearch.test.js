@@ -1,0 +1,45 @@
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import HospitalSearch from './HospitalSearch';
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
+jest.mock('axios', () => ({
+  get: jest.fn(() =>
+    Promise.resolve({
+      data: [
+        {
+          hosp_id: 1,
+          name: 'Hospital 1',
+          distance: 6,
+          expertCount: 1,
+          rating: 4,
+          lat: 43.4564,
+          lon: -80.5122,
+        },
+      ],
+    })
+  ),
+}));
+
+describe('HospitalSearch Filtering', () => {
+  test('Filters out hospitals with distance greater than selected maxDistance', async () => {
+    render(<HospitalSearch />);
+
+    await waitFor(() => expect(screen.getByText('Hospital 1')).toBeInTheDocument());
+
+    const distanceSelect = screen.getByTestId('max-distance-select');
+    userEvent.click(distanceSelect);
+    const option = await screen.findByText('10 km');
+    userEvent.click(option);
+    const newOption = await screen.findByText('5 km');
+    userEvent.click(newOption);
+
+    await waitFor(() => expect(screen.queryByText('Hospital 1')).not.toBeInTheDocument());
+  });
+
+});
+
+
+
+

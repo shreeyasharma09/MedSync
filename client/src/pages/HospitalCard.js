@@ -4,7 +4,7 @@ import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import PlaceIcon from '@mui/icons-material/Place';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 
-const HospitalCard = ({ name, distance, expertCount }) => {
+const HospitalCard = ({ hosp_id, name, distance, expertCount, rating, onSelectHospital }) => {
   return (
     <Card
       variant="outlined"
@@ -65,8 +65,10 @@ const HospitalCard = ({ name, distance, expertCount }) => {
               color: '#3e4b32',
               borderColor: '#B5C7A3',
               fontSize: '0.875rem',
+              cursor: 'pointer',
             }}
             variant="outlined"
+            onClick={() => onSelectHospital(hosp_id)} // Call function to fetch experts
           />
         </Stack>
       </CardContent>
@@ -93,6 +95,8 @@ const HospitalCard = ({ name, distance, expertCount }) => {
 };
 
 export default HospitalCard;
+
+
 
 
 
