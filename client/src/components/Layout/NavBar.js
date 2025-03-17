@@ -1,13 +1,13 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import {AppBar, Toolbar, Typography, Button, Box} from '@mui/material';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {getAuth, signOut} from 'firebase/auth';
 
-// Mock function to get user role 
 const getUserRole = () => {
-  return localStorage.getItem("userRole") || "patient"; 
+  return localStorage.getItem('userRole') || 'patient';
 };
 
-const NavLink = ({ to, label }) => {
+const NavLink = ({to, label}) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
@@ -29,23 +29,48 @@ const NavLink = ({ to, label }) => {
 };
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const userRole = getUserRole();
-  const profilePath = userRole === "patient" ? "/profile/view-profile" : "/profile/hp";
+  const profilePath =
+    userRole === 'patient' ? '/profile/view-profile' : '/profile/hp';
+  const dashboardPath =
+    userRole === 'patient' ? '/PatientDashboard' : '/HealthcareDashboard';
+  const bookingsPath =
+    userRole === 'patient' ? '/PatientBookings' : '/HealthcareBookings';
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      localStorage.clear();
+      navigate('/Landing');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   return (
     <AppBar
       position="static"
       elevation={0}
-      style={{ backgroundColor: 'white', borderBottom: '1px solid #e0e0e0' }}
+      style={{backgroundColor: 'white', borderBottom: '1px solid #e0e0e0'}}
     >
-      <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h6" style={{ color: '#3e4b32', fontWeight: 'bold' }}>
-          <span style={{ color: '#708b69' }}>Med</span>Sync
+      <Toolbar style={{display: 'flex', justifyContent: 'space-between'}}>
+        <Typography variant="h6" style={{color: '#3e4b32', fontWeight: 'bold'}}>
+          <span style={{color: '#708b69'}}>Med</span>Sync
         </Typography>
         <Box>
           <NavLink to="/Landing" label="Landing" />
-          <NavLink to="/Home" label="Home" />
+          <NavLink to={dashboardPath} label="Dashboard" />
+          <NavLink to={bookingsPath} label="Bookings" />
           <NavLink to={profilePath} label="Profile" />
+          <Button
+            onClick={handleLogout}
+            color="inherit"
+            style={{color: 'black', fontWeight: '300', textTransform: 'none'}}
+          >
+            Logout
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>
