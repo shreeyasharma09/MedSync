@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { getAuth, signOut } from 'firebase/auth';
 
 // Mock function to get user role 
 const getUserRole = () => {
@@ -29,8 +30,20 @@ const NavLink = ({ to, label }) => {
 };
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const userRole = getUserRole();
   const profilePath = userRole === "patient" ? "/profile/view-profile" : "/profile/hp";
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      localStorage.clear();
+      navigate('/Landing');
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <AppBar
@@ -46,6 +59,9 @@ const NavBar = () => {
           <NavLink to="/Landing" label="Landing" />
           <NavLink to="/Home" label="Home" />
           <NavLink to={profilePath} label="Profile" />
+          <Button onClick={handleLogout} color="inherit" style={{ color: 'black', fontWeight: '300', textTransform: 'none' }}>
+            Logout
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>
