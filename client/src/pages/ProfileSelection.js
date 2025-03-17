@@ -65,7 +65,7 @@ const ProfileSelection = () => {
           Profile Management
         </Typography>
         <Typography variant="body1" sx={{color: '#7d8a6a', mb: 4}}>
-          Choose what you’d like to update or view
+          Choose what you would like to update or view
         </Typography>
 
         <Box

@@ -32,7 +32,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const userRole = getUserRole();
   const profilePath =
-    userRole === 'patient' ? '/profile/view-profile' : '/profile/hp';
+    userRole === 'patient' ? '/profile/p' : '/profile/hp';
   const dashboardPath =
     userRole === 'patient' ? '/PatientDashboard' : '/HealthcareDashboard';
   const bookingsPath =
