@@ -1,11 +1,11 @@
 import React from 'react';
 import {AppBar, Toolbar, Typography, Button, Box} from '@mui/material';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {getAuth, signOut} from 'firebase/auth';
 
 const getUserRole = () => {
   return localStorage.getItem('userRole') || 'patient';
 };
-
 
 const NavLink = ({to, label}) => {
   const location = useLocation();
@@ -29,11 +29,25 @@ const NavLink = ({to, label}) => {
 };
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const userRole = getUserRole();
   const profilePath =
     userRole === 'patient' ? '/profile/view-profile' : '/profile/hp';
-  const dashboardPath = userRole === 'patient' ? '/PatientDashboard' : '/HealthcareDashboard';
-  const bookingsPath = userRole === 'patient' ? '/PatientBookings' : '/HealthcareBookings';
+  const dashboardPath =
+    userRole === 'patient' ? '/PatientDashboard' : '/HealthcareDashboard';
+  const bookingsPath =
+    userRole === 'patient' ? '/PatientBookings' : '/HealthcareBookings';
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      localStorage.clear();
+      navigate('/Landing');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   return (
     <AppBar
@@ -50,6 +64,13 @@ const NavBar = () => {
           <NavLink to={dashboardPath} label="Dashboard" />
           <NavLink to={bookingsPath} label="Bookings" />
           <NavLink to={profilePath} label="Profile" />
+          <Button
+            onClick={handleLogout}
+            color="inherit"
+            style={{color: 'black', fontWeight: '300', textTransform: 'none'}}
+          >
+            Logout
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>
