@@ -2,10 +2,10 @@ import React from 'react';
 import {AppBar, Toolbar, Typography, Button, Box} from '@mui/material';
 import {Link, useLocation} from 'react-router-dom';
 
-// Mock function to get user role
 const getUserRole = () => {
   return localStorage.getItem('userRole') || 'patient';
 };
+
 
 const NavLink = ({to, label}) => {
   const location = useLocation();
@@ -32,8 +32,8 @@ const NavBar = () => {
   const userRole = getUserRole();
   const profilePath =
     userRole === 'patient' ? '/profile/view-profile' : '/profile/hp';
-  const dashboardPath = userRole === 'patient' ? '/PatientDashboard' : '/';
-  const bookingsPath = userRole === 'patient' ? '/HealthcareBookings' : '/HealthcareBookings';
+  const dashboardPath = userRole === 'patient' ? '/PatientDashboard' : '/HealthcareDashboard';
+  const bookingsPath = userRole === 'patient' ? '/PatientBookings' : '/HealthcareBookings';
 
   return (
     <AppBar
