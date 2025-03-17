@@ -1,5 +1,5 @@
-import React, {useState, useContext} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   TextField,
   Button,
@@ -11,7 +11,7 @@ import {
   IconButton,
   InputAdornment,
 } from '@mui/material';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import FirebaseContext from '../components/Firebase/context'; // Import Firebase context
 
 const SignUpPatient = () => {
@@ -31,46 +31,69 @@ const SignUpPatient = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // State for error messages
 
-  const handleChange = event => {
-    setFormValues({...formValues, [event.target.name]: event.target.value});
-    setErrors({...errors, [event.target.name]: ''});
+  const handleChange = (event) => {
+    setFormValues({ ...formValues, [event.target.name]: event.target.value });
+    setErrors({ ...errors, [event.target.name]: '' });
   };
 
-  const handleSubmit = async event => {
+  // New Handle submit with fb
+  
+  const handleSubmit = async (event) => {
     event.preventDefault();
     let newErrors = {};
     let hasErrors = false;
-    Object.keys(formValues).forEach(field => {
+  
+    // Validate form fields
+    Object.keys(formValues).forEach((field) => {
       if (!formValues[field]) {
         newErrors[field] = 'This field is required';
         hasErrors = true;
       }
     });
+  
     setErrors(newErrors);
-
+  
     if (!hasErrors) {
       setLoading(true);
-      setError(null); // Reset error state
-
+      setError(null);
+  
       try {
-        // Create user with Firebase
-        await firebase.doCreateUserWithEmailAndPassword(
-          formValues.healthCard,
-          formValues.password,
-        );
-        console.log('User created successfully!');
-        navigate('/Home'); // Redirect user to the home page after successful sign-up
+        await firebase.doCreateUserWithEmailAndPassword(formValues.healthCard, formValues.password);
+        console.log("User created successfully in Firebase!");
+  
+        const response = await fetch('/api/patientSignup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            healthCard: formValues.healthCard,
+            dob: formValues.dob,
+            firstName: formValues.firstName,
+            lastName: formValues.lastName,
+            address: formValues.address,
+            password: formValues.password,
+          }),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to create account in backend');
+        }
+  
+        console.log('User registered successfully in backend!');
+        navigate('/Home');
       } catch (err) {
-        setError(err.message); // Set error message
+        setError(err.message); // Display error message
         console.error('Sign-up error:', err);
       } finally {
-        setLoading(false); // Reset the loading state
+        setLoading(false); 
       }
     }
   };
+  
 
   const handleClickShowPassword = () => {
-    setShowPassword(prev => !prev);
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -97,7 +120,7 @@ const SignUpPatient = () => {
           <Typography
             variant="h5"
             align="center"
-            style={{color: '#3e4b32', fontWeight: '600'}}
+            style={{ color: '#3e4b32', fontWeight: '600' }}
             gutterBottom
           >
             Create your new <strong>patient</strong> account
@@ -105,18 +128,14 @@ const SignUpPatient = () => {
           <Typography
             variant="body2"
             align="center"
-            style={{color: '#7d8a6a'}}
+            style={{ color: '#7d8a6a' }}
             gutterBottom
           >
             Please fill in your information to create your account
           </Typography>
 
           {error && ( // Display an error message
-            <Typography
-              color="error"
-              align="center"
-              style={{marginBottom: '1rem'}}
-            >
+            <Typography color="error" align="center" style={{ marginBottom: '1rem' }}>
               {error}
             </Typography>
           )}
@@ -134,7 +153,7 @@ const SignUpPatient = () => {
                   onChange={handleChange}
                   error={!!errors.healthCard}
                   helperText={errors.healthCard}
-                  InputProps={{style: {borderRadius: '8px'}}}
+                  InputProps={{ style: { borderRadius: '8px' } }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -143,12 +162,14 @@ const SignUpPatient = () => {
                   label="Date of Birth"
                   name="dob"
                   variant="outlined"
-                  placeholder="MM/DD/YYYY"
+                  // placeholder="MM/DD/YYYY"
                   value={formValues.dob}
                   onChange={handleChange}
                   error={!!errors.dob}
                   helperText={errors.dob}
-                  InputProps={{style: {borderRadius: '8px'}}}
+                  type = "date"
+                  InputLabelProps={{ shrink:true }}
+                  InputProps={{ style: { borderRadius: '8px' } }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -162,7 +183,7 @@ const SignUpPatient = () => {
                   onChange={handleChange}
                   error={!!errors.firstName}
                   helperText={errors.firstName}
-                  InputProps={{style: {borderRadius: '8px'}}}
+                  InputProps={{ style: { borderRadius: '8px' } }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -176,7 +197,7 @@ const SignUpPatient = () => {
                   onChange={handleChange}
                   error={!!errors.lastName}
                   helperText={errors.lastName}
-                  InputProps={{style: {borderRadius: '8px'}}}
+                  InputProps={{ style: { borderRadius: '8px' } }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -190,7 +211,7 @@ const SignUpPatient = () => {
                   onChange={handleChange}
                   error={!!errors.address}
                   helperText={errors.address}
-                  InputProps={{style: {borderRadius: '8px'}}}
+                  InputProps={{ style: { borderRadius: '8px' } }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -205,13 +226,10 @@ const SignUpPatient = () => {
                   error={!!errors.password}
                   helperText={errors.password}
                   InputProps={{
-                    style: {borderRadius: '8px'},
+                    style: { borderRadius: '8px' },
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleClickShowPassword}
-                          edge="end"
-                        >
+                        <IconButton onClick={handleClickShowPassword} edge="end">
                           {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
@@ -242,7 +260,7 @@ const SignUpPatient = () => {
           <Typography
             variant="body2"
             align="center"
-            style={{marginTop: '1rem', color: '#7d8a6a'}}
+            style={{ marginTop: '1rem', color: '#7d8a6a' }}
           >
             Already have an account?{' '}
             <Link
