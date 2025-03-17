@@ -5,7 +5,7 @@ import { Box, Container, Typography, Paper, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AppointmentsSection } from "./appointments-section";
 
-export default function HomePage() {
+export default function PatientDashboard() {
   const userName = "Sarah Johnson";
   const navigate = useNavigate();
 
