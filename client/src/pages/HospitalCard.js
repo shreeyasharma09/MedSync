@@ -5,6 +5,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 
 const HospitalCard = ({ hosp_id, name, distance, expertCount, rating, onSelectHospital }) => {
+  console.log(expertCount)
   return (
     <Card
       variant="outlined"

@@ -80,7 +80,7 @@ export default function OldIssues() {
                 cursor: 'pointer',
                 '&:hover': {backgroundColor: '#d4e0c6'},
               }}
-              onClick={() => navigate(`/recommendations/${issue.issue_id}`)}
+              onClick={() => navigate(`/hospital-search`)}
             >
               <Typography
                 variant="h6"
