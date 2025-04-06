@@ -125,7 +125,8 @@ export default function NewIssue() {
     });
 
     if (response.ok) {
-      navigate('/hospital-search'); // Redirect to old issues after submission
+      const data = await response.json();
+      navigate(`/hospital-search?patient_id=${patient_id}&issue_id=${data.issue_id}&specialty=${encodeURIComponent(data.specialty)}&issue=${encodeURIComponent(data.issue)}`)
     } else {
       console.error('Failed to submit issue');
     }

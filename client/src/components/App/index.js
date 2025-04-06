@@ -24,6 +24,7 @@ import HealthcareBookings from '../../pages/HealthcareBookings';
 import IssueSelection from '../../pages/IssueSelection';
 import NewIssue from '../../pages/NewIssue';
 import OldIssues from '../../pages/OldIssues';
+import PatientBookings from '../../pages/PatientBooking';
 // import Recommendations from '../../pages/Recommendations';
 // Initializing Firebase
 const firebase = new Firebase();
@@ -63,6 +64,7 @@ const App = () => {
           <Route path="/old-issues" element={<OldIssues />} />
           {/* <Route path="/recommendations/:issueId" element={<Recommendations />} /> */}
           <Route path="/hospital-search" element={<HospitalSearch />} />
+          <Route path="/patient-bookings" element={<PatientBookings />} />
         </Routes>
       </Router>
     </FirebaseContext.Provider>
