@@ -1,39 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Container, Box } from '@mui/material';
 import axios from 'axios';
+import {useLocation} from 'react-router-dom';
 import HospitalCard from './HospitalCard';
 import ExpertCard from './ExpertCard';
 import FilterControls from './FilterControls';
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 const HospitalSearch = () => {
+  const query = useQuery();
+  const specialty = query.get('specialty');
+  const issue_id = query.get('issue_id');
+  const patient_id = query.get('patient_id')
+  const issue = query.get('issue');
   const [hospitals, setHospitals] = useState([]);
   const [filteredHospitals, setFilteredHospitals] = useState([]);
   const [selectedExperts, setSelectedExperts] = useState([]);
   const [maxDistance, setMaxDistance] = useState(10);
   const [rating, setRating] = useState('');
-  const issue = 'Kidney Stones';
+ 
+  const fetchLocationAndHospitals = async (issue_id,specialty,issue,patient_id) => {
+    try {
+      const locationData = { lat: 43.41, lon: -80.55 }; //needs to be replaced with geolocation api
+      const hospitalRes = await axios.get('/api/hospitals', {
+        params: {
+          lat: locationData.lat,
+          lon: locationData.lon,
+          issue_id,
+          specialty,
+          issue,
+          patient_id
+        },
+      });
+      console.log(hospitalRes.data);
+      setHospitals(hospitalRes.data);
+      setFilteredHospitals(hospitalRes.data);
+    } catch (error) {
+      console.error('Error fetching hospitals:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchLocationAndHospitals = async () => {
-      try {
-        const locationData = { lat: 43.41, lon: -80.55 }; //needs to be replaced with geolocation api
-        const hospitalRes = await axios.get('/api/hospitals', {
-          params: {
-            lat: locationData.lat,
-            lon: locationData.lon,
-            issue,
-          },
-        });
-        console.log(hospitalRes.data)
-        setHospitals(hospitalRes.data);
-        setFilteredHospitals(hospitalRes.data);
-      } catch (error) {
-        console.error('Error fetching hospitals:', error);
-      }
-    };
-
-    fetchLocationAndHospitals();
-  }, []);
+    if (issue_id && specialty &&issue&&patient_id) {
+      fetchLocationAndHospitals(issue_id,specialty,issue,patient_id);
+    }
+    console.log(issue_id);
+    console.log(specialty);
+    console.log(issue);
+    console.log(patient_id);
+  }, [issue_id,specialty,issue,patient_id]);
 
   useEffect(() => {
     const filtered = hospitals.filter((hospital) => {
@@ -45,9 +63,10 @@ const HospitalSearch = () => {
   }, [maxDistance, rating, hospitals]);
 
   // Function to fetch experts when a hospital is selected
-  const fetchExperts = async (hosp_id) => {
+  const fetchExperts = async (hosp_id,issue_id,patient_id) => {
+    if (!issue_id || !patient_id || !hosp_id) return;
     try {
-      const res = await axios.get(`/api/experts`, { params: { hosp_id } });
+      const res = await axios.get(`/api/experts`, { params: { hosp_id,issue_id,patient_id } });
       setSelectedExperts(res.data);
     } catch (error) {
       console.error('Error fetching experts:', error);
@@ -80,7 +99,7 @@ const HospitalSearch = () => {
               distance={hospital.distance}
               expertCount={hospital.expertCount}
               rating={hospital.rating}
-              onSelectHospital={fetchExperts}
+              onSelectHospital={() => fetchExperts(hospital.hosp_id, issue_id, patient_id)}
             />
           ))}
         </Box>

@@ -3,9 +3,10 @@ import { Card, CardContent, Typography, CardActions, Button, Chip, Stack, CardHe
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import PlaceIcon from '@mui/icons-material/Place';
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
+import { useNavigate } from 'react-router-dom';
 
 const HospitalCard = ({ hosp_id, name, distance, expertCount, rating, onSelectHospital }) => {
-  console.log(expertCount)
+  const navigate = useNavigate();
   return (
     <Card
       variant="outlined"
@@ -87,8 +88,9 @@ const HospitalCard = ({ hosp_id, name, distance, expertCount, rating, onSelectHo
             px: 2.5,
             py: 1,
           }}
+          onClick={()=> navigate('/patient-bookings')}
         >
-          Book Appointment
+          Book Appointment with an Expert
         </Button>
       </CardActions>
     </Card>

@@ -59,24 +59,30 @@ app.post('/api/loadUserSettings', (req, res) => {
   
   // API to get hospitals sorted by distance and rating
   app.get('/api/hospitals', (req, res) => {
-	let connection = mysql.createConnection(config);
-	const { lat, lon, issue } = req.query;
-  
-	if (!lat || !lon || !issue) {
-	  return res.status(400).json({ error: 'Latitude, longitude, and issue are required' });
+	const connection = mysql.createConnection(config);
+	const { lat, lon, issue_id,issue, patient_id } = req.query;
+	console.log("Received query params:", req.query);
+
+	if (!lat || !lon || !issue_id || !patient_id) {
+	  return res.status(400).json({ error: 'lat, lon, issue_id, and patient_id are required' });
 	}
   
 	const query = `
-	  SELECT h.hosp_id, h.name, h.lat, h.lon, h.rating, 
-			 COUNT(hp.id) AS expertCount
+	  SELECT 
+		h.hosp_id, 
+		h.name, 
+		h.lat, 
+		h.lon, 
+		h.rating,
+		COUNT(DISTINCT hp.id) AS expertCount
 	  FROM issues i
 	  JOIN healthcare_professionals hp ON i.specialty = hp.specialty
-	  JOIN hospital h ON hp.hospital = h.name
-	  WHERE i.issue = ?
-	  GROUP BY h.hosp_id
+	  JOIN hospital h ON hp.hospital_id = h.hosp_id
+	  WHERE i.issue_id = ? AND i.patient_id = ?
+	  GROUP BY h.hosp_id, h.name, h.lat, h.lon, h.rating
 	`;
   
-	connection.query(query, [issue], (err, results) => {
+	connection.query(query, [issue_id, patient_id], (err, results) => {
 	  if (err) {
 		console.error('Error fetching hospitals:', err);
 		return res.status(500).json({ error: 'Database query error' });
@@ -86,39 +92,40 @@ app.post('/api/loadUserSettings', (req, res) => {
 		const distance = getDistance(lat, lon, hospital.lat, hospital.lon);
 		return {
 		  ...hospital,
-		  distance: parseFloat(distance.toFixed(1)), // Round distance
+		  distance: parseFloat(distance.toFixed(1))
 		};
 	  });
   
 	  hospitalsWithDistance.sort((a, b) => a.distance - b.distance || b.rating - a.rating);
-  
 	  res.json(hospitalsWithDistance);
 	});
   });
   
   app.get('/api/experts', (req, res) => {
-	let connection = mysql.createConnection(config);
-	const { hosp_id } = req.query;
+	const connection = mysql.createConnection(config);
+	const { hosp_id, issue_id, patient_id } = req.query;
   
-	if (!hosp_id) {
-	  return res.status(400).json({ error: 'Hospital ID is required' });
+	if (!hosp_id || !issue_id || !patient_id) {
+	  return res.status(400).json({ error: 'hosp_id, issue_id, and patient_id are required' });
 	}
   
 	const query = `
-	  SELECT first_name, last_name,specialty 
-	  FROM healthcare_professionals
-	  WHERE hospital IN (SELECT name FROM hospital WHERE hosp_id = ?)
+	  SELECT hp.first_name, hp.last_name, hp.specialty
+	  FROM issues i
+	  JOIN healthcare_professionals hp ON i.specialty = hp.specialty
+	  JOIN hospital h ON hp.hospital_id = h.hosp_id
+	  WHERE i.issue_id = ? AND i.patient_id = ? AND h.hosp_id = ?
 	`;
   
-	connection.query(query, [hosp_id], (err, results) => {
+	connection.query(query, [issue_id, patient_id, hosp_id], (err, results) => {
 	  if (err) {
 		console.error('Error fetching experts:', err);
 		return res.status(500).json({ error: 'Database query error' });
 	  }
-  
 	  res.json(results);
 	});
   });
+  
   
 
 // Patient Sign Up API
@@ -173,7 +180,8 @@ app.post('/api/issues', (req, res) => {
             res.status(500).send('Error inserting issue data');
             return;
         }
-        res.status(200).send('Issue submitted successfully');
+        res.status(200).json({ issue_id: results.insertId });
+
     });
 
     connection.end();
