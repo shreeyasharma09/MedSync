@@ -100,6 +100,10 @@ const HospitalSearch = () => {
               expertCount={hospital.expertCount}
               rating={hospital.rating}
               onSelectHospital={() => fetchExperts(hospital.hosp_id, issue_id, patient_id)}
+              patient_id={patient_id}
+              issue_id={issue_id}
+              issue={issue}
+              specialty={specialty}
             />
           ))}
         </Box>
