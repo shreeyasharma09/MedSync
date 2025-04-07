@@ -24,7 +24,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 
-const appointments = [
+const appointments_test = [
   {
     id: 1,
     patientName: 'Sarah Wilson',
@@ -63,7 +63,7 @@ export default function HealthcareBookings() {
   const [availability, setAvailability] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [appointments, setAppointments] = useState([]);
   useEffect(() => {
     const fetchAvailability = async () => {
       try {
@@ -98,7 +98,7 @@ export default function HealthcareBookings() {
 
   const handleSaveAvailability = async () => {
     try {
-      await axios.post('/api/availability/3', { availability }); // to implement next
+      await axios.post('/api/availability/3', { availability });
       console.log('Availability saved successfully.');
     } catch (error) {
       console.error('Error saving availability:', error);
@@ -106,6 +106,19 @@ export default function HealthcareBookings() {
     setIsEditing(false);
   };
 
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const res = await axios.get('/api/bookings/3');
+        console.log('Bookings from backend:', res.data);
+        setAppointments(res.data);
+      } catch (err) {
+        console.error('Failed to fetch appointments:', err);
+      }
+    };
+    fetchAppointments();
+  }, []);
+  
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#f7f9f6', py: 4 }}>
       <Container
@@ -199,8 +212,14 @@ export default function HealthcareBookings() {
                         <Stack direction="row" spacing={1} alignItems="center">
                           <AccessTimeIcon sx={{ fontSize: 16, color: '#7d8a6a' }} />
                           <Typography variant="body2" sx={{ color: '#7d8a6a' }}>
-                            {appt.time} &nbsp;•&nbsp; {appt.reason}
+                            {appt.time} &nbsp;•&nbsp; {appt.reason} &nbsp;•&nbsp; 
+                            {new Date(appt.date).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            })}
                           </Typography>
+
                         </Stack>
                       }
                     />
