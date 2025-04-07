@@ -54,6 +54,33 @@ describe('PatientBookings Component', () => {
   });
 
   it('shows time slots when "Find a time slot" is clicked', async () => {
+    const expertId = 5;
+    const expert = {
+      id: expertId,
+      first_name: 'Maya',
+      last_name: 'Patel',
+      specialty: 'Cardiology',
+    };
+  
+    axios.get
+      .mockResolvedValueOnce({  // For /api/experts
+        data: [expert],
+      })
+      .mockResolvedValueOnce({  // For /api/availability/5
+        data: [
+          {
+            day: 'Monday',
+            start_time: '11:00:00',
+            end_time: '13:00:00',
+            is_available: true,
+          },
+        ],
+      });
+  
+    axios.post.mockResolvedValueOnce({  // For /api/check-booked-slots
+      data: { booked: [] },
+    });
+  
     render(
       <MemoryRouter
         initialEntries={[
@@ -63,12 +90,14 @@ describe('PatientBookings Component', () => {
         <PatientBookings />
       </MemoryRouter>
     );
-
-    const buttons = await screen.findAllByText('Find a time slot');
-    fireEvent.click(buttons[0]);
-    
-
-    // Expect a time slot like "09:00 - 09:30" to appear
-    expect(await screen.findByText(/09:00 - 09:30/)).toBeInTheDocument();
+  
+    // Wait for expert card to render
+    expect(await screen.findByText('Dr. Maya Patel')).toBeInTheDocument();
+  
+    const toggleButton = await screen.findByText('Find a time slot');
+    fireEvent.click(toggleButton);
+  
+    // Should show at least the first slot
+    expect(await screen.findByText(/11:00 - 11:30/)).toBeInTheDocument();
   });
 });
