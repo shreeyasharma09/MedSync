@@ -110,7 +110,7 @@ app.post('/api/loadUserSettings', (req, res) => {
 	}
   
 	const query = `
-	  SELECT hp.first_name, hp.last_name, hp.specialty
+	  SELECT hp.first_name, hp.last_name, hp.specialty,hp.id
 	  FROM issues i
 	  JOIN healthcare_professionals hp ON i.specialty = hp.specialty
 	  JOIN hospital h ON hp.hospital_id = h.hosp_id
@@ -207,5 +207,129 @@ app.get('/api/issues/:patient_id', (req, res) => {
     connection.end();
 });
 
+app.get('/api/availability/:hp_id', (req, res) => {
+	const connection = mysql.createConnection(config);
+	const hp_id = req.params.hp_id;
+	if (!hp_id) {
+	  return res.status(400).json({ error: 'hp_id is required' });
+	}
+	const query = `
+	  SELECT 
+		hp.first_name, 
+		hp.last_name,
+		a.day_of_week AS day, 
+		a.start_time, 
+		a.end_time, 
+		a.is_available
+	  FROM hp_availability a
+	  JOIN healthcare_professionals hp ON hp.id = a.hp_id
+	  WHERE a.hp_id = ?
+	  ORDER BY FIELD(a.day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+	`;
+  
+	connection.query(query, [hp_id], (err, results) => {
+	  if (err) {
+		console.error('Error fetching availability with HP details:', err);
+		return res.status(500).json({ error: 'Database error' });
+	  }
+  
+	  res.json(results);
+	});
+  });
+  app.post('/api/availability/:hp_id', (req, res) => {
+	const connection = mysql.createConnection(config);
+	const hp_id = req.params.hp_id;
+	const availability = req.body.availability;
+  
+	if (!Array.isArray(availability)) {
+	  return res.status(400).json({ error: 'Availability must be an array' });
+	}
+  
+	const insertQuery = `
+	  INSERT INTO hp_availability (hp_id, day_of_week, start_time, end_time, is_available)
+	  VALUES ?
+	  ON DUPLICATE KEY UPDATE
+		start_time = VALUES(start_time),
+		end_time = VALUES(end_time),
+		is_available = VALUES(is_available)
+	`;
+  
+	const values = availability.map(slot => [
+	  hp_id,
+	  slot.day,
+	  slot.start || null,
+	  slot.end || null,
+	  slot.is_available
+	]);
+  
+	connection.query(insertQuery, [values], (err) => {
+	  if (err) {
+		console.error('Error upserting availability:', err);
+		return res.status(500).json({ error: 'Database query error' });
+	  }
+	  res.json({ message: 'Availability updated successfully' });
+	});
+  });
+  
+  app.post('/api/bookings', (req, res) => {
+	const connection = mysql.createConnection(config);
+	const { hp_id, issue_id, patient_id, day, slot, date } = req.body;
+  
+	if (!hp_id || !issue_id || !patient_id || !day || !slot || !date) {
+	  return res.status(400).json({ error: 'All fields are required' });
+	}
+  
+	const query = `
+	  INSERT INTO bookings (hp_id, issue_id, patient_id, day, slot, date)
+	  SELECT ?, ?, ?, ?, ?, ?
+	  FROM dual
+	  WHERE NOT EXISTS (
+		SELECT 1 FROM bookings 
+		WHERE hp_id = ? AND day = ? AND slot = ? AND date = ?
+	  )
+	`;
+  
+	const values = [hp_id, issue_id, patient_id, day, slot, date, hp_id, day, slot, date];
+  
+	connection.query(query, values, (err, results) => {
+	  if (err) {
+		console.error('Booking error:', err);
+		return res.status(500).json({ error: 'Database error' });
+	  }
+  
+	  if (results.affectedRows === 0) {
+		return res.status(409).json({ error: 'Slot already booked' });
+	  }
+  
+	  res.status(201).json({ message: 'Booking successful' });
+	});
+  });
+
+
+  app.post('/api/check-booked-slots', (req, res) => {
+	const connection = mysql.createConnection(config);
+	const { hp_id, day, date, slots } = req.body;
+  
+	if (!hp_id || !day || !date || !Array.isArray(slots)) {
+	  return res.status(400).json({ error: 'Invalid request body' });
+	}
+	
+	const query = `
+		SELECT slot FROM bookings
+		WHERE hp_id = ? AND date = ? AND slot IN (${slots.map(() => '?').join(', ')})
+		`;
+
+	connection.query(query, [hp_id, date, ...slots], (err, results) => {
+	if (err) {
+		console.error('Error checking booked slots:', err);
+		return res.status(500).json({ error: 'Database error' });
+	}
+
+	const booked = results.map(row => row.slot);
+	res.json({ booked });
+	});
+  });
+  
+  
 app.listen(port, () => console.log(`Listening on port ${port}`)); //for the dev version
 //app.listen(port, '172.31.31.77'); //for the deployed version, specify the IP address of the server
