@@ -330,6 +330,49 @@ app.get('/api/availability/:hp_id', (req, res) => {
 	});
   });
   
+  app.get('/api/bookings/:hp_id', (req, res) => {
+	const connection = mysql.createConnection(config);
+	const hp_id = req.params.hp_id;
+  
+	const query = `
+	  SELECT 
+		b.booking_id,
+		b.patient_id,
+		p.first_name AS patient_first_name,
+		p.last_name AS patient_last_name,
+		b.day,
+		b.slot,
+		b.date,
+		b.status,
+		i.issue
+	  FROM bookings b
+	  JOIN patients p ON b.patient_id = p.id
+	  JOIN issues i ON b.issue_id = i.issue_id
+	  WHERE b.hp_id = ?
+	  ORDER BY b.date, b.slot
+	`;
+  
+	connection.query(query, [hp_id], (err, results) => {
+	  if (err) {
+		console.error('Error fetching bookings:', err);
+		return res.status(500).json({ error: 'Database error' });
+	  }
+	  console.log('Bookings from backend:', results);
+	  const formatted = results.map(row => ({
+		id: row.booking_id,
+		patientName: `${row.patient_first_name} ${row.patient_last_name}`,
+		time: row.slot,
+		reason: row.issue,
+		date: row.date,
+		day: row.day,
+		status: row.status,
+	  }));
+  
+	  res.json(formatted);
+	  console.log('Formatted bookings:', formatted);
+	});
+  });
+  
   
 app.listen(port, () => console.log(`Listening on port ${port}`)); //for the dev version
 //app.listen(port, '172.31.31.77'); //for the deployed version, specify the IP address of the server
