@@ -30,14 +30,11 @@ const NavLink = ({to, label}) => {
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const userRole = getUserRole();
-  const profilePath =
-    userRole === 'patient' ? '/profile/p' : '/profile/hp';
-  const dashboardPath =
-    userRole === 'patient' ? '/PatientDashboard' : '/HealthcareDashboard';
-  const bookingsPath =
-    userRole === 'patient' ? '/PatientBookings' : '/HealthcareBookings';
   const auth = getAuth();
+
+  const isLoggedIn = !!auth.currentUser;
+
+  const userRole = localStorage.getItem('userRole');
 
   const handleLogout = async () => {
     try {
@@ -59,19 +56,42 @@ const NavBar = () => {
         <Typography variant="h6" style={{color: '#3e4b32', fontWeight: 'bold'}}>
           <span style={{color: '#708b69'}}>Med</span>Sync
         </Typography>
-        <Box>
-          <NavLink to="/Landing" label="Landing" />
-          <NavLink to={dashboardPath} label="Dashboard" />
-          <NavLink to={bookingsPath} label="Bookings" />
-          <NavLink to={profilePath} label="Profile" />
-          <Button
-            onClick={handleLogout}
-            color="inherit"
-            style={{color: 'black', fontWeight: '300', textTransform: 'none'}}
-          >
-            Logout
-          </Button>
-        </Box>
+
+        {!isLoggedIn && (
+          <Box>
+            <NavLink to="/Landing" label="Landing" />
+          </Box>
+        )}
+
+        {isLoggedIn && userRole === 'patient' && (
+          <Box>
+            <NavLink to="/PatientDashboard" label="Dashboard" />
+            <NavLink to="/PatientBookings" label="Bookings" />
+            <NavLink to="/profile/p" label="Profile" />
+            <Button
+              onClick={handleLogout}
+              color="inherit"
+              style={{color: 'black'}}
+            >
+              Logout
+            </Button>
+          </Box>
+        )}
+
+        {isLoggedIn && userRole === 'healthcare' && (
+          <Box>
+            <NavLink to="/HealthcareDashboard" label="Dashboard" />
+            <NavLink to="/HealthcareBookings" label="Bookings" />
+            <NavLink to="/profile/hp" label="Profile" />
+            <Button
+              onClick={handleLogout}
+              color="inherit"
+              style={{color: 'black'}}
+            >
+              Logout
+            </Button>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );

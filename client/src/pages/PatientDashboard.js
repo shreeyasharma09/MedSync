@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom';
 import {AppointmentsSection} from './appointments-section';
 
 export default function PatientDashboard() {
-  const userName = 'Sarah Johnson';
+  const userName = 'Shreeya Sharma';
   const navigate = useNavigate();
 
   return (
