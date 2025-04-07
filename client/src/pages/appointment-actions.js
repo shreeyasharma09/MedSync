@@ -7,14 +7,14 @@ let appointments = [
     id: 1,
     doctorName: 'Dr. Emily Chen',
     specialty: 'Cardiology',
-    date: '25-03-2025',
+    date: '25-04-2025',
     time: '09:30',
   },
   {
     id: 2,
     doctorName: 'Dr. Jessica Kim',
     specialty: 'Dermatology',
-    date: '02-04-2025',
+    date: '02-05-2025',
     time: '14:15',
   },
 ];

@@ -56,12 +56,12 @@ const specialties = [
 
 const HpProfile = () => {
   const [profile, setProfile] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
+    firstName: 'Sam',
+    lastName: 'Rey',
     mincNumber: 'CAMD-1234-5679',
     hospital: 'Hospital 1',
-    specialty: 'Cardiology',
-    password: 'Default@123',
+    specialty: 'Radiology',
+    password: '123456',
   });
 
   const [isEditing, setIsEditing] = useState(false);

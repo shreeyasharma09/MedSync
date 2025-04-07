@@ -1,6 +1,5 @@
 // src/pages/HealthcareDashboard.js
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -11,55 +10,39 @@ import {
   Avatar,
   Chip,
   List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Stack,
+  CircularProgress,
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function HealthcareDashboard() {
   const navigate = useNavigate();
 
-  const dailyAppointments = 3;
+  // State for appointments from the backend
+  const [appointments, setAppointments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Using the total appointments fetched
+  const totalAppointments = appointments.length;
+
+  // Example static stats; replace or fetch similarly if needed
   const pendingMessages = 2;
   const newPatients = 1;
 
-  const appointments = [
-    {
-      id: 1,
-      patientName: 'Sarah Wilson',
-      time: '09:00 AM',
-      reason: 'Follow-up',
-      status: 'Checked In',
-      color: '#7e57c2',
-    },
-    {
-      id: 2,
-      patientName: 'Michael Brown',
-      time: '10:30 AM',
-      reason: 'New Patient',
-      status: 'Scheduled',
-      color: '#ef5350',
-    },
-    {
-      id: 3,
-      patientName: 'Jessica Lee',
-      time: '01:00 PM',
-      reason: 'Annual Checkup',
-      status: 'Scheduled',
-      color: '#42a5f5',
-    },
-    {
-      id: 4,
-      patientName: 'Robert Chen',
-      time: '02:30 PM',
-      reason: 'Lab Results',
-      status: 'Scheduled',
-      color: '#ef5350',
-    },
-  ];
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const res = await axios.get('/api/bookings/3');
+        setAppointments(res.data);
+      } catch (err) {
+        console.error('Failed to fetch appointments:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAppointments();
+  }, []);
 
   const goToSchedule = () => {
     navigate('/HealthcareBookings');
@@ -84,16 +67,16 @@ export default function HealthcareDashboard() {
       >
         <Typography
           variant="h4"
-          sx={{fontWeight: 'bold', color: '#3e4b32', mb: 1}}
+          sx={{ fontWeight: 'bold', color: '#3e4b32', mb: 1 }}
         >
           Hello, Dr. Williams
         </Typography>
-        <Typography variant="body1" sx={{color: '#7d8a6a', mb: 3}}>
+        <Typography variant="body1" sx={{ color: '#7d8a6a', mb: 3 }}>
           Welcome to your healthcare dashboard. Quickly review your daily stats
           and upcoming tasks below.
         </Typography>
 
-        <Grid container spacing={3} sx={{mb: 4}}>
+        <Grid container spacing={3} sx={{ mb: 4 }}>
           <Grid item xs={12} md={4}>
             <Paper
               sx={{
@@ -103,14 +86,14 @@ export default function HealthcareDashboard() {
               }}
               elevation={0}
             >
-              <Typography variant="h6" sx={{color: '#3e4b32', mb: 1}}>
+              <Typography variant="h6" sx={{ color: '#3e4b32', mb: 1 }}>
                 Appointments Today
               </Typography>
               <Typography
                 variant="h5"
-                sx={{fontWeight: 'bold', color: '#3e4b32'}}
+                sx={{ fontWeight: 'bold', color: '#3e4b32' }}
               >
-                {dailyAppointments}
+                {totalAppointments}
               </Typography>
             </Paper>
           </Grid>
@@ -124,12 +107,12 @@ export default function HealthcareDashboard() {
               }}
               elevation={0}
             >
-              <Typography variant="h6" sx={{color: '#3e4b32', mb: 1}}>
+              <Typography variant="h6" sx={{ color: '#3e4b32', mb: 1 }}>
                 Unread Messages
               </Typography>
               <Typography
                 variant="h5"
-                sx={{fontWeight: 'bold', color: '#3e4b32'}}
+                sx={{ fontWeight: 'bold', color: '#3e4b32' }}
               >
                 {pendingMessages}
               </Typography>
@@ -145,12 +128,12 @@ export default function HealthcareDashboard() {
               }}
               elevation={0}
             >
-              <Typography variant="h6" sx={{color: '#3e4b32', mb: 1}}>
+              <Typography variant="h6" sx={{ color: '#3e4b32', mb: 1 }}>
                 New Patients
               </Typography>
               <Typography
                 variant="h5"
-                sx={{fontWeight: 'bold', color: '#3e4b32'}}
+                sx={{ fontWeight: 'bold', color: '#3e4b32' }}
               >
                 {newPatients}
               </Typography>
@@ -158,14 +141,14 @@ export default function HealthcareDashboard() {
           </Grid>
         </Grid>
 
-        <Box sx={{display: 'flex', gap: 2, mb: 4}}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
           <Button
             variant="contained"
             sx={{
               textTransform: 'none',
               fontWeight: 'bold',
               bgcolor: '#3e4b32',
-              '&:hover': {bgcolor: '#2f3b26'},
+              '&:hover': { bgcolor: '#2f3b26' },
               borderRadius: 2,
             }}
             onClick={goToSchedule}
@@ -192,12 +175,16 @@ export default function HealthcareDashboard() {
 
         <Typography
           variant="h5"
-          sx={{fontWeight: 'bold', color: '#3e4b32', mb: 2}}
+          sx={{ fontWeight: 'bold', color: '#3e4b32', mb: 2 }}
         >
           Upcoming Appointments
         </Typography>
 
-        {appointments.length === 0 ? (
+        {isLoading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+            <CircularProgress />
+          </Box>
+        ) : appointments.length === 0 ? (
           <Paper
             sx={{
               p: 4,
@@ -207,19 +194,19 @@ export default function HealthcareDashboard() {
             }}
             elevation={0}
           >
-            <Typography sx={{color: '#7d8a6a', mb: 1}}>
+            <Typography sx={{ color: '#7d8a6a', mb: 1 }}>
               No scheduled appointments at this time.
             </Typography>
-            <Typography variant="body2" sx={{color: '#9c9c9c'}}>
+            <Typography variant="body2" sx={{ color: '#9c9c9c' }}>
               New appointments will appear here.
             </Typography>
           </Paper>
         ) : (
           <List disablePadding>
-            {appointments.map(appt => {
+            {appointments.map((appt) => {
               const initials = appt.patientName
                 .split(' ')
-                .map(n => n[0])
+                .map((n) => n[0])
                 .join('')
                 .toUpperCase();
 
@@ -245,7 +232,7 @@ export default function HealthcareDashboard() {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Avatar
                       sx={{
                         bgcolor: appt.color || '#9AAE9A',
@@ -259,13 +246,13 @@ export default function HealthcareDashboard() {
                     <Box>
                       <Typography
                         variant="subtitle1"
-                        sx={{fontWeight: 'bold', color: '#3e4b32'}}
+                        sx={{ fontWeight: 'bold', color: '#3e4b32' }}
                       >
                         {appt.patientName}
                       </Typography>
-                      <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
-                        <AccessTimeIcon sx={{fontSize: 16, color: '#7d8a6a'}} />
-                        <Typography variant="body2" sx={{color: '#7d8a6a'}}>
+                      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                        <AccessTimeIcon sx={{ fontSize: 16, color: '#7d8a6a' }} />
+                        <Typography variant="body2" sx={{ color: '#7d8a6a' }}>
                           {appt.time} &nbsp; • &nbsp; {appt.reason}
                         </Typography>
                       </Box>

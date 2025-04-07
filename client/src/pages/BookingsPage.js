@@ -21,16 +21,16 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 const appointments = [
   {
     id: 1,
-    doctor: 'Dr. Emily Johnson',
-    date: '2023-06-15',
-    time: '10:00 AM',
+    doctor: 'Dr. Emily Chen',
+    date: '2025-04-25',
+    time: '9:30 AM',
     issue: 'Annual checkup',
   },
   {
     id: 2,
-    doctor: 'Dr. Michael Lee',
-    date: '2023-06-20',
-    time: '2:00 PM',
+    doctor: 'Dr. Jessica Kim',
+    date: '2025-05-02',
+    time: '2:15 PM',
     issue: 'Follow-up on test results',
   },
 ];
