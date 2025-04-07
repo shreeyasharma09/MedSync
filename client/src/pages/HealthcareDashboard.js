@@ -69,7 +69,7 @@ export default function HealthcareDashboard() {
           variant="h4"
           sx={{ fontWeight: 'bold', color: '#3e4b32', mb: 1 }}
         >
-          Hello, Dr. Williams
+          Hello, Dr. Johnson
         </Typography>
         <Typography variant="body1" sx={{ color: '#7d8a6a', mb: 3 }}>
           Welcome to your healthcare dashboard. Quickly review your daily stats
