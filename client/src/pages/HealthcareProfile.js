@@ -56,11 +56,11 @@ const specialties = [
 
 const HpProfile = () => {
   const [profile, setProfile] = useState({
-    firstName: 'Sam',
-    lastName: 'Rey',
+    firstName: 'Sarah',
+    lastName: 'Johnson',
     mincNumber: 'CAMD-1234-5679',
     hospital: 'Hospital 1',
-    specialty: 'Radiology',
+    specialty: 'General Surgery',
     password: '123456',
   });
 
