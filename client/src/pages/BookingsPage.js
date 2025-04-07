@@ -85,7 +85,7 @@ export default function BookingsPage() {
           <Typography variant="h4" sx={{fontWeight: 'bold', color: '#3e4b32'}}>
             Your Appointments
           </Typography>
-          <Button
+          {/* <Button
             variant="contained"
             sx={{
               bgcolor: '#9AAE9A',
@@ -97,7 +97,7 @@ export default function BookingsPage() {
             startIcon={<AddCircleOutlineIcon />}
           >
             New Appointment
-          </Button>
+          </Button> */}
         </Box>
 
         {appointments.length === 0 ? (
