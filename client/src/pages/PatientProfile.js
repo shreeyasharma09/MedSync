@@ -21,13 +21,13 @@ const PatientProfile = () => {
   // Dummy profile data (Replace with API call)
   const [profile, setProfile] = useState({
     healthCardNumber: '1234-567-890-AB',
-    firstName: 'Sarah',
-    lastName: 'Johnson',
-    dateOfBirth: '1990-05-15',
-    address: '123 Main St, Anytown, AN 12345',
+    firstName: 'Shreeya',
+    lastName: 'Sharma',
+    dateOfBirth: '2004-10-10',
+    address: '123 Test Road, ON',
     phoneNumber: '(555) 123-4567',
-    email: 'sarah.johnson@example.com',
-    password: 'Default@123',
+    email: 's.sharma@gmail.com',
+    password: '123456',
   });
 
   const [isEditing, setIsEditing] = useState(false);

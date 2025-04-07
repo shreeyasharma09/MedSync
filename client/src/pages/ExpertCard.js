@@ -4,6 +4,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import CloseIcon from '@mui/icons-material/Close';
 
 const ExpertCard = ({ experts, onClose }) => {
+  console.log(experts)
   return (
     <Card
       variant="outlined"
